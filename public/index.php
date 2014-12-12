@@ -1,4 +1,5 @@
 <?php
+echo 'heheh';
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
