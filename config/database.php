@@ -55,9 +55,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'sdf_bioarieg641',
-			'username'  => 'sdf_bioarieg641',
-			'password'  => '15UcjemW',
+			'database'  => 'gbom_netp_dev',
+			'username'  => 'gbom_NatureP',
+			'password'  => 'N4tu73&P',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

@@ -11,9 +11,16 @@
 |
 */
 
+
 $router->get('/', 'WelcomeController@index');
 
 $router->get('/home', 'HomeController@index');
+
+$router->get('/imap', 'Imap\ImapController@index');
+
+// $router->resources('adresses', 'PersonneController');
+
+$router->resource('/adresses', 'PersonneController@index');
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +36,4 @@ $router->get('/home', 'HomeController@index');
 $router->controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
-]);
+	]);
