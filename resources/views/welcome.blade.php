@@ -4,11 +4,10 @@
 <div id="welcome">
     <div class="jumbotron">
         <div class="container">
-            <h1 class="jumbotron__header">You have arrived.</h1>
+            <h1 class="jumbotron__header">Prochaine version du site Nature & Progrès Ariège.</h1>
 
             <p class="jumbotron__body">
-                Laravel is a web application framework with expressive, elegant syntax. We believe development
-                must be an enjoyable, creative experience. Enjoy the fresh air.
+                Nature & Progrès, la bio associative et solidaire.
             </p>
         </div>
     </div>
