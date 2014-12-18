@@ -1,4 +1,4 @@
-{!! Form::open(array('route' => 'adresse.create', 'method' => 'POST')) !!}
+fgghfgfhg{!! Form::open(array('route' => 'adresse.create', 'method' => 'POST')) !!}
 	<ul>
 		<li>
 			{!! Form::label('ad1', 'Ad1:') !!}
