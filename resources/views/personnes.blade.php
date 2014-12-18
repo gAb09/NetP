@@ -1,13 +1,19 @@
-<!DOCTYPE html>
-<html lang="en-US">
-	<head>
-		<meta charset="utf-8">
-	</head>
-	<body>
-		<h2>Personnes</h2>
-
-		<div>
-			{{{var_dump($personnes)}}}
-		</div>
-	</body>
-</html>
+{{ Form::open(array('route' => 'route.name', 'method' => 'POST')) }}
+	<ul>
+		<li>
+			{{ Form::label('id', 'Id:') }}
+			{{ Form::text('id') }}
+		</li>
+		<li>
+			{{ Form::label('Nom', 'Nom:') }}
+			{{ Form::text('Nom') }}
+		</li>
+		<li>
+			{{ Form::label('Prenom', 'Prenom:') }}
+			{{ Form::text('Prenom') }}
+		</li>
+		<li>
+			{{ Form::submit() }}
+		</li>
+	</ul>
+{{ Form::close() }}

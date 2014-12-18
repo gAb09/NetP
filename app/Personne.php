@@ -1,29 +1,21 @@
 <?php namespace App;
-
 use Illuminate\Database\Eloquent\Model;
+
+// use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Personne extends Model {
 
+	protected $table = 'personnes';
+	public $timestamps = true;
 
-	/**
-	 * The database table used by the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'adresses';
+	// use SoftDeletingTrait;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	// protected $fillable = ['name', 'email', 'password'];
+	protected $dates = ['deleted_at'];
+	protected $fillable = array('Nom', 'Prenom');
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	// protected $hidden = ['password', 'remember_token'];
+	public function adresse()
+	{
+		return $this->morphToMany('Adresse', 'adressable');
+	}
 
 }

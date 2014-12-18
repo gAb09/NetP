@@ -10,6 +10,10 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::resource('adresse', 'AdresseController');
+Route::resource('personne', 'PersonneController');
+Route::resource('structure', 'StructureController');
+Route::resource('adressable', 'AdressableController');
 
 
 $router->get('/', 'WelcomeController@index');
@@ -20,7 +24,7 @@ $router->get('/imap', 'Imap\ImapController@index');
 
 // $router->resources('adresses', 'PersonneController');
 
-$router->resource('/adresses', 'PersonneController@index');
+$router->resource('/adresses', 'AdresseController@index');
 
 /*
 |--------------------------------------------------------------------------

@@ -1,20 +1,18 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
-
 class DatabaseSeeder extends Seeder {
 
-	/**
-	 * Run the database seeds.
-	 *
-	 * @return void
-	 */
 	public function run()
 	{
-		Model::unguard();
+		Eloquent::unguard();
 
-		// $this->call('UserTableSeeder');
+		$this->call('AdresseTableSeeder');
+		$this->command->info('Adresse table seeded!');
+
+		$this->call('PersonneTableSeeder');
+		$this->command->info('Personne table seeded!');
+
+		$this->call('StructureTableSeeder');
+		$this->command->info('Structure table seeded!');
 	}
-
 }
