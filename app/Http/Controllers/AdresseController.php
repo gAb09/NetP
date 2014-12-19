@@ -1,6 +1,10 @@
 <?php namespace App\Http\Controllers;
-use App\Adresse;
+
+use App\Models\Adresse;
+use App\Gestion\AdresseG as Gestion;
+
 class AdresseController extends Controller {
+
 
   /**
    * Display a listing of the resource.
@@ -9,8 +13,9 @@ class AdresseController extends Controller {
    */
   public function index()
   {
-    $adresses = Adresse::get()->toArray();
-    return view('adresses')->with(compact('adresses'));
+  	$this->gestion = new Gestion();
+  	$adresses = $this->gestion->getAll();
+  	return view('Adresses/index')->with(compact('adresses'));
   }
 
   /**
@@ -20,7 +25,6 @@ class AdresseController extends Controller {
    */
   public function create()
   {
-
   }
 
   /**

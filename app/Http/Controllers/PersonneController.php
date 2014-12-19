@@ -1,15 +1,21 @@
-<?php 
+<?php namespace App\Http\Controllers;
+use App\Models\Personne;
+use App\Gestion\PersonneG as Gestion;
 
-class PersonneController extends BaseController {
+class PersonneController extends Controller {
 
   /**
    * Display a listing of the resource.
    *
    * @return Response
    */
-  public function index()
-  {
-    
+  public function index(){
+    $this->gestion = new Gestion;
+
+    return view('Personnes.index')
+    ->with('personnes', $this->gestion->getAll())
+    ->with('titre_page', 'Personnes')
+    ;
   }
 
   /**
@@ -19,7 +25,7 @@ class PersonneController extends BaseController {
    */
   public function create()
   {
-    
+
   }
 
   /**
@@ -29,7 +35,7 @@ class PersonneController extends BaseController {
    */
   public function store()
   {
-    
+
   }
 
   /**
@@ -40,7 +46,7 @@ class PersonneController extends BaseController {
    */
   public function show($id)
   {
-    
+
   }
 
   /**
@@ -51,7 +57,7 @@ class PersonneController extends BaseController {
    */
   public function edit($id)
   {
-    
+
   }
 
   /**
@@ -62,7 +68,7 @@ class PersonneController extends BaseController {
    */
   public function update($id)
   {
-    
+
   }
 
   /**
@@ -73,7 +79,7 @@ class PersonneController extends BaseController {
    */
   public function destroy($id)
   {
-    
+
   }
   
 }

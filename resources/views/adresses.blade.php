@@ -1,4 +1,4 @@
-fgghfgfhg{!! Form::open(array('route' => 'adresse.create', 'method' => 'POST')) !!}
+{!! Form::open(array('route' => 'adresse.create', 'method' => 'POST')) !!}
 	<ul>
 		<li>
 			{!! Form::label('ad1', 'Ad1:') !!}
@@ -25,4 +25,3 @@ fgghfgfhg{!! Form::open(array('route' => 'adresse.create', 'method' => 'POST')) 
 		</li>
 	</ul>
 {!! Form::close() !!}
-{!! var_dump($adresses) !!}

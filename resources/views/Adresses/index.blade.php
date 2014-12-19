@@ -9,7 +9,7 @@
 		<div>
 			{{{var_dump($adresses)}}}
 			@foreach($adresses as $adresse)
-			{{{$adresse->personnes}}}
+			{{{$adresse->ad1}}}
 			@endforeach
 		</div>
 	</body>

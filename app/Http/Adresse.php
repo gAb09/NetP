@@ -1,16 +1,10 @@
-<?php
-
-namespace App;
+<?php namespace App;
 use Illuminate\Database\Eloquent\Model;
-
-// use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Adresse extends Model {
 
 	protected $table = 'adresses';
 	public $timestamps = true;
-
-	// use SoftDeletingTrait;
 
 	protected $dates = ['deleted_at'];
 	protected $fillable = array('ad1', 'ad2', 'cp', 'ville');
