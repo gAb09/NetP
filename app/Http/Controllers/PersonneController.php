@@ -11,9 +11,10 @@ class PersonneController extends Controller {
   public function index(PersonneG $Personnes){
     return view('Personnes.index')
     ->with('personnes', $Personnes->getAll())
+    ->with('title', 'Les personnes')
     ->with('titre_page', 'Personnes')
     ;
-  }
+}
 
   /**
    * Show the form for creating a new resource.
@@ -52,10 +53,19 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function edit($id)
-  {
+  public function edit($id, PersonneG $Personnes){
+    $personne = $Personnes->edit($id);
+    $selectAdresses = $Personnes->selectAdresses();
+    $selectContacts = $Personnes->selectContacts();
 
-  }
+    return view('Personnes.edit')
+    ->with('title', 'Modification d\'une fiche')
+    ->with('titre_page', 'Modification de la fiche de '.$personne->nomcomplet)
+    ->with(compact('personne'))
+    ->with(compact('selectAdresses'))
+    ->with(compact('selectContacts'))
+    ;
+}
 
   /**
    * Update the specified resource in storage.
@@ -63,10 +73,13 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update($id, PersonneG $PersonneG)
   {
+    // return 'update de la fiche '.$id;
+    dd(Input::all());
 
-  }
+    $PersonneG->update($id, Input::all());
+}
 
   /**
    * Remove the specified resource from storage.
@@ -76,9 +89,9 @@ class PersonneController extends Controller {
    */
   public function destroy($id)
   {
+    return 'suppression de la fiche '.$id;
+}
 
-  }
-  
 }
 
 ?>

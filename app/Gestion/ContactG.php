@@ -1,11 +1,11 @@
 <?php namespace App\Gestion;
-use App\Models\Adresse;
+use App\Models\Contact;
 
-class AdresseG{
+class ContactG{
 
 	public function completeModel($model){
 		$model = $this->nullVersIndefini($model);
-		$model = $this->concatAdresse($model);
+		$model = $this->concatContact($model);
 		return $model;
 	}
 
@@ -24,8 +24,8 @@ class AdresseG{
 	}
 
 
-	public function concatAdresse($model){
-		$model->adresse = 
+	public function concatContact($model){
+		$model->contact = 
 		$model->ad1
 		.' '.$model->ad2
 		.' - '.$model->cp
@@ -38,7 +38,7 @@ class AdresseG{
 
 
 		public function getAll(){
-			$collection  = Adresse::all();
+			$collection  = Contact::all();
 
 			$collection->each(function($model) use ($collection)
 			{

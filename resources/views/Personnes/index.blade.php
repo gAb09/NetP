@@ -19,10 +19,10 @@
 <div class="offset3 span11">
 	@foreach($personnes as $personne)
 
-	<div class="portrait">
+	<div class="portrait" ondblClick = "javascript:document.location.href='personne/{!!$personne['id']!!}/edit';">
 
 		<h3 class="{{{$personne['nomcomplet_class']}}}">
-			{!! $personne['nomcomplet'] !!} {!! $personne['id'] !!}
+			{!! $personne['nomcomplet'] !!}
 		</h3>
 
 		<!-- Adresse -->

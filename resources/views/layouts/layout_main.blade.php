@@ -10,7 +10,7 @@
 	<!-- Application Title -->
 	<title>
 		@section('titre')
-		{{ isset($titre_page) ? $titre_page : Menu::where('nom_sys', Request::segment(1))->get()[0]->etiquette }}
+		{{ isset($title) ? $title : 'Pas de titre' }}
 		@show
 	</title>
 

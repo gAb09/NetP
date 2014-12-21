@@ -11,6 +11,7 @@ class Personne extends Model {
 	protected $dates = ['deleted_at'];
 	protected $fillable = array('Nom', 'Prenom');
 
+
 	public function adresses()
 	{
 		return $this->morphToMany('App\\Models\\Adresse', 'adressable');
