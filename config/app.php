@@ -1,5 +1,4 @@
 <?php
-
 return [
 
 	/*
@@ -111,6 +110,10 @@ return [
 	'providers' => [
 
 		/*
+		 * Add-on Service Providers...
+		 */
+		'Barryvdh\Debugbar\ServiceProvider',
+		/*
 		 * Application Service Providers...
 		 */
 		'App\Providers\AppServiceProvider',
@@ -170,6 +173,7 @@ return [
 
 	'aliases' => [
 
+		'Debugbar' => 'Barryvdh\Debugbar\Facade',
 		'App'       => 'Illuminate\Support\Facades\App',
 		'Artisan'   => 'Illuminate\Support\Facades\Artisan',
 		'Auth'      => 'Illuminate\Support\Facades\Auth',
