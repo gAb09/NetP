@@ -1,8 +1,9 @@
-@extends('layout')
+@extends('layouts.layout_main')
 
 @section('titre')
 @parent
 @stop
+
 
 
 @section('topcontent1')
@@ -15,37 +16,52 @@
 
 
 @section('contenu')
-<div class="container-fluid">
+<div class="offset3 span11">
+	@foreach($personnes as $personne)
 
-	<div class="page span12">
+	<div class="portrait">
 
-		@foreach($personnes as $personne)
+		<h3 class="{{{$personne['nomcomplet_class']}}}">
+			{!! $personne['nomcomplet'] !!} {!! $personne['id'] !!}
+		</h3>
 
-		<div class="portrait {{{$personne->statut_css}}}">
-
-			<h3>{!! $personne->nomcomplet !!}
-			</h3>
-			<p class="{{{$personne->nom_class}}}">
-				{!! $personne->nom !!}
-			</p>
-			<p class="{{{$personne->nomcomplet_class}}}">
-				{!! $personne->prenom !!}
-			</p>
-			<p class="{{{$personne->statut_class}}}">
-				{!! $personne->statut !!}
-			</p>
-		</div>
-
+		<!-- Adresse -->
+		@if(!empty($personne['adresses']))
+		@foreach ($personne['adresses'] as $adresse)
+		<p class="">
+			{{{$adresse['ad1']}}}  {{{$adresse['ad2']}}} {{{$adresse['cp']}}} {{{$adresse['ville']}}}
+		</p>
 		@endforeach
+		@else
+		<p class="indefini">
+			Adresse manquante
+		</p>
+		@endif
+
+		<!-- Contact -->
+		@if(!empty($personne['contacts']))
+		@foreach ($personne['contacts'] as $contact)
+		<p class="">
+			{{{$contact['ad1']}}}  {{{$contact['ad2']}}} {{{$contact['cp']}}} {{{$contact['ville']}}}
+		</p>
+		@endforeach
+		@else
+		<p class="indefini">
+			Coordonnées manquantes
+		</p>
+		@endif
+
+		<!-- Statut -->
+		@if($personne['statut'] == '???')
+		<p class="{{{$personne['statut_class']}}}">
+			Statut indéfini !
+		</p>
+		@endif
 	</div>
+
+	@endforeach
 </div>
 
 
 
-@stop
-
-
-@section('tresorerie/footer')
-@parent
-<h3>  Le footer de banques</h3>
 @stop

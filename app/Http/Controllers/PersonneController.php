@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
-use App\Models\Personne;
-use App\Gestion\PersonneG as Gestion;
+use App\Gestion\PersonneG;
 
 class PersonneController extends Controller {
 
@@ -9,11 +8,9 @@ class PersonneController extends Controller {
    *
    * @return Response
    */
-  public function index(){
-    $this->gestion = new Gestion;
-
+  public function index(PersonneG $Personnes){
     return view('Personnes.index')
-    ->with('personnes', $this->gestion->getAll())
+    ->with('personnes', $Personnes->getAll())
     ->with('titre_page', 'Personnes')
     ;
   }

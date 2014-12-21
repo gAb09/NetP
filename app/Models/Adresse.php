@@ -11,12 +11,12 @@ class Adresse extends Model {
 
 	public function personne()
 	{
-		return $this->morphedByMany('App\Personne', 'adressable');
+		return $this->morphedByMany('App\\Models\\Personne', 'adressable');
 	}
 
 	public function structure()
 	{
-		return $this->morphedByMany('App\Structure', 'adressable');
+		return $this->morphedByMany('App\\Models\\Structure', 'adressable');
 	}
 
 }

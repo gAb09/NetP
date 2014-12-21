@@ -1,16 +1,24 @@
-<!DOCTYPE html>
-<html lang="en-US">
-	<head>
-		<meta charset="utf-8">
-	</head>
-	<body>
-		<h2>Adresses</h2>
+@extends('layouts.layout_main')
 
-		<div>
-			{{{var_dump($adresses)}}}
-			@foreach($adresses as $adresse)
-			{{{$adresse->ad1}}}
-			@endforeach
-		</div>
-	</body>
-</html>
+@section('titre')
+@parent
+@stop
+
+
+
+@section('topcontent1')
+<h1 class="titrepage">{{$titre_page}}</h1>
+@stop
+
+
+@section('topcontent2')
+@stop
+
+
+@section('contenu')
+<div>
+	@foreach($adresses as $adresse)
+	{!! $adresse->ad1 !!} {!! $adresse->ad2 !!} {!! $adresse->cp !!} {!! $adresse->ville !!}<br />
+	@endforeach
+</div>
+@stop

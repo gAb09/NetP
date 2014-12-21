@@ -15,7 +15,10 @@ class AdresseController extends Controller {
   {
   	$this->gestion = new Gestion();
   	$adresses = $this->gestion->getAll();
-  	return view('Adresses/index')->with(compact('adresses'));
+  	return view('Adresses/index')
+    ->with(compact('adresses'))
+    ->with('titre_page', 'Adresses')
+    ;
   }
 
   /**

@@ -1,6 +1,8 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Gestion\PersonneG;
+use App\Gestion\PersonneGInterface;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -28,7 +30,9 @@ class AppServiceProvider extends ServiceProvider {
 		$this->app->bind(
 			'Illuminate\Contracts\Auth\Registrar',
 			'App\Services\Registrar'
-		);
+			);
+
+
 	}
 
 }
