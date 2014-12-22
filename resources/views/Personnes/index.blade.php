@@ -29,7 +29,7 @@
 		@if(!empty($personne['adresses']))
 		@foreach ($personne['adresses'] as $adresse)
 		<p class="">
-			{{{$adresse['ad1']}}}  {{{$adresse['ad2']}}} {{{$adresse['cp']}}} {{{$adresse['ville']}}}
+			{{{$adresse['ad1']}}}  {{{$adresse['ad2']}}}<br />{{{$adresse['cp']}}} {{{$adresse['ville']}}}
 		</p>
 		@endforeach
 		@else

@@ -47,6 +47,12 @@ class AdresseG{
 			return $collection;
 		}
 
+	public function adressePartaged($personne_id, $adresse_id){
+		$adresses = Adresse::with('personne')->where('id', $adresse_id)->first()->personne;
+			return $adresses;
+		}
+
+
 	}
 
 

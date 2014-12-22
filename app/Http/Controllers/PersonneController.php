@@ -1,5 +1,9 @@
 <?php namespace App\Http\Controllers;
 use App\Gestion\PersonneG;
+use App\Gestion\AdresseG;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+
 
 class PersonneController extends Controller {
 
@@ -8,9 +12,10 @@ class PersonneController extends Controller {
    *
    * @return Response
    */
-  public function index(PersonneG $Personnes){
+  public function index(PersonneG $personnesG){
+    $personnes = $personnesG->getAll();
     return view('Personnes.index')
-    ->with('personnes', $Personnes->getAll())
+    ->with(compact('personnes'))
     ->with('title', 'Les personnes')
     ->with('titre_page', 'Personnes')
     ;
@@ -53,10 +58,11 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function edit($id, PersonneG $Personnes){
-    $personne = $Personnes->edit($id);
-    $selectAdresses = $Personnes->selectAdresses();
-    $selectContacts = $Personnes->selectContacts();
+  public function edit($id, PersonneG $personnesG, AdresseG $adresseG){
+    $personne = $personnesG->edit($id);
+    $selectAdresses = $personnesG->selectAdresses();
+    $selectContacts = $personnesG->selectContacts();
+    $adressePartagedWith = $adresseG->adressePartaged($id, $personne->adresses->first()->id);
 
     return view('Personnes.edit')
     ->with('title', 'Modification d\'une fiche')
@@ -64,6 +70,7 @@ class PersonneController extends Controller {
     ->with(compact('personne'))
     ->with(compact('selectAdresses'))
     ->with(compact('selectContacts'))
+    ->with(compact('adressePartagedWith'))
     ;
 }
 
@@ -73,12 +80,12 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function update($id, PersonneG $PersonneG)
+  public function update($id, PersonneG $PersonneG, Request $request, Redirector $redirect)
   {
     // return 'update de la fiche '.$id;
-    dd(Input::all());
 
-    $PersonneG->update($id, Input::all());
+    $PersonneG->update($id, $request);
+    return $redirect->action('PersonneController@index');
 }
 
   /**

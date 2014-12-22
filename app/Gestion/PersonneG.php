@@ -2,6 +2,9 @@
 use App\Models\Personne;
 use App\Gestion\AdresseG as AdresseG;
 use App\Gestion\ContactG as ContactG;
+use illuminate\Database\Query\Builder;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Connectors;
 
 class PersonneG {
 
@@ -50,7 +53,7 @@ class PersonneG {
 
 
 	public function getAll(){
-		$collection  = Personne::with(array('adresses', 'contacts'))->orderBy('statut')->get();
+		$collection  = Personne::with(array('adresses', 'contacts'))->orderBy('nom')->get();
 
 // dd($collection);
 
@@ -81,18 +84,17 @@ class PersonneG {
 
 
 	public function update($id, $input){
-dd(Input::all());
-		$personne = $this->find($id); 
-		DB::transaction(function() use($personne)
-		{       
-			$personne->auteurs()->sync(Input::get('auteur'));
-			$personne->titre = Input::get('titre');
-			$personne->theme_id = Input::get('theme_id');
-			$type = Input::get('livrable');
-			$personne->livrable_type = $type;
-			$personne->livrable_id = ($type == 'Lib\Editeurs\Editeur') ? Input::get('editeur_id') : Input::get('autoedite_id');
-			$personne->save();
-		});
-		return true;
+// dd($input->all());
+		$personne = Personne::find($id); 
+// dd($input->get('adresse'));
+
+//AfA prévoir transaction
+		$personne->adresses()->sync(array($input->get('adresse')));
+			// $personne->titre = Input::get('titre');
+			// $personne->theme_id = Input::get('theme_id');
+			// $type = Input::get('livrable');
+			// $personne->livrable_type = $type;
+			// $personne->livrable_id = ($type == 'Lib\Editeurs\Editeur') ? Input::get('editeur_id') : Input::get('autoedite_id');
+			// $personne->save();
 	}
 }
