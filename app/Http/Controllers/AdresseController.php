@@ -2,6 +2,7 @@
 
 use App\Models\Adresse;
 use App\Gestion\AdresseG as Gestion;
+use App\Http\Requests\EditAdresseForm;
 
 class AdresseController extends Controller {
 
@@ -59,7 +60,11 @@ class AdresseController extends Controller {
    */
   public function edit($id)
   {
+$adresse = Adresse::find($id);
 
+return view('Adresses.form')
+->with(compact('adresse'))
+;
   }
 
   /**
@@ -68,9 +73,11 @@ class AdresseController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update($id, Gestion $PersonneG, EditAdresseForm $EditAdresseForm)
   {
+    $PersonneG->update($id);
 
+    return \Redirect::action('AdresseController@index');
   }
 
   /**

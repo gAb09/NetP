@@ -51,7 +51,7 @@ return [
 	|
 	*/
 
-	'locale' => 'en',
+	'locale' => 'fr',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -112,7 +112,7 @@ return [
 		/*
 		 * Add-on Service Providers...
 		 */
-		'Barryvdh\Debugbar\ServiceProvider',
+		// 'Barryvdh\Debugbar\ServiceProvider',
 		/*
 		 * Application Service Providers...
 		 */
@@ -173,7 +173,7 @@ return [
 
 	'aliases' => [
 
-		'Debugbar' => 'Barryvdh\Debugbar\Facade',
+		// 'Debugbar' => 'Barryvdh\Debugbar\Facade',
 		'App'       => 'Illuminate\Support\Facades\App',
 		'Artisan'   => 'Illuminate\Support\Facades\Artisan',
 		'Auth'      => 'Illuminate\Support\Facades\Auth',

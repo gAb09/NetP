@@ -35,7 +35,19 @@ class AdresseG{
 			return $model;
 		}
 
+		public function update($id){
+		$adresse = Adresse::find($id); 
+// dd(\Input::get('itineraire'));
 
+			$adresse->itineraire = \Input::get('itineraire');
+			// $adresse->theme_id = Input::get('theme_id');
+			// $type = Input::get('livrable');
+			// $adresse->livrable_type = $type;
+			// $adresse->livrable_id = ($type == 'Lib\Editeurs\Editeur') ? Input::get('editeur_id') : Input::get('autoedite_id');
+			$adresse->save();
+
+
+		}
 
 		public function getAll(){
 			$collection  = Adresse::all();

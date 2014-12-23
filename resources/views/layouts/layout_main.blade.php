@@ -27,6 +27,7 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
+	<script src="/ckeditor/ckeditor.js"></script>
 </head>
 
 
@@ -37,6 +38,9 @@
 
 		<!-- - - - - - - - - - - - - - - - MENU  - - - - - - - - - - - - - - -->
 @include('partials.static_menu')
+
+		<!-- - - - - - - - - - - - - - - - MESSAGES  - - - - - - - - - - - - - - -->
+@include('partials.errors.basic')
 
 		<!-- - - - - - - - - - - - - - - - TOP CONTENT (2 zones) - - - - - - - - - - - - - - -->
 		<div class="row-fluid" style="padding-bottom:5px">

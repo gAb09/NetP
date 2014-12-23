@@ -22,9 +22,6 @@ $router->get('/home', 'HomeController@index');
 
 $router->get('/imap', 'Imap\ImapController@index');
 
-// $router->resources('adresses', 'PersonneController');
-
-$router->resource('/adresses', 'AdresseController@index');
 
 /*
 |--------------------------------------------------------------------------
