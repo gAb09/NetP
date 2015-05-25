@@ -90,6 +90,11 @@ abstract class GeneratorCommand extends Command {
 			return $name;
 		}
 
+		if (str_contains($name, '/'))
+		{
+			$name = str_replace('/', '\\', $name);
+		}
+
 		return $this->parseName($this->getDefaultNamespace(trim($rootNamespace, '\\')).'\\'.$name);
 	}
 
@@ -119,7 +124,7 @@ abstract class GeneratorCommand extends Command {
 	}
 
 	/**
-	 * Build the controller class with the given name.
+	 * Build the class with the given name.
 	 *
 	 * @param  string  $name
 	 * @return string

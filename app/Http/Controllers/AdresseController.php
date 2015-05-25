@@ -16,11 +16,13 @@ class AdresseController extends Controller {
   {
   	$this->gestion = new Gestion();
   	$adresses = $this->gestion->getAll();
+    //return dd($adresses);
   	return view('Adresses/index')
     ->with(compact('adresses'))
     ->with('titre_page', 'Adresses')
     ;
   }
+
 
   /**
    * Show the form for creating a new resource.
@@ -31,6 +33,7 @@ class AdresseController extends Controller {
   {
   }
 
+
   /**
    * Store a newly created resource in storage.
    *
@@ -40,6 +43,7 @@ class AdresseController extends Controller {
   {
 
   }
+
 
   /**
    * Display the specified resource.
@@ -52,6 +56,7 @@ class AdresseController extends Controller {
 
   }
 
+
   /**
    * Show the form for editing the specified resource.
    *
@@ -60,12 +65,15 @@ class AdresseController extends Controller {
    */
   public function edit($id)
   {
-$adresse = Adresse::find($id);
+        $this->gestion = new Gestion();
 
-return view('Adresses.form')
-->with(compact('adresse'))
-;
+    $adresse = $this->gestion->edit($id);
+
+    return view('Adresses.edit')
+    ->with(compact('adresse'))
+    ;
   }
+
 
   /**
    * Update the specified resource in storage.
@@ -75,10 +83,12 @@ return view('Adresses.form')
    */
   public function update($id, Gestion $PersonneG, EditAdresseForm $EditAdresseForm)
   {
+    dd('update : '.$id);
     $PersonneG->update($id);
 
     return \Redirect::action('AdresseController@index');
   }
+
 
   /**
    * Remove the specified resource from storage.

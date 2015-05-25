@@ -1,5 +1,10 @@
 <?php
 
+use  App\Models\Personne;
+use  App\Models\Media;
+use  App\Models\Telephone;
+use  App\Models\Coordonnable;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -10,31 +15,64 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+
+Route::get('/', 'WelcomeController@index');
+
+Route::get('home', 'HomeController@index');
+
+Route::get('/imap/free/{util}', 'Imap\ImapController@free');
+
+Route::get('/imap', 'Imap\ImapController@index');
+
 Route::resource('adresse', 'AdresseController');
+Route::resource('coordonnees', 'AdresseController');
+Route::resource('adherent', 'AdherentController');
 Route::resource('personne', 'PersonneController');
 Route::resource('structure', 'StructureController');
 Route::resource('adressable', 'AdressableController');
 
 
-$router->get('/', 'WelcomeController@index');
+Route::get('ck', function(){
+	return View::make('ck');
+});
 
-$router->get('/home', 'HomeController@index');
+Route::get('tel', function(){
+	$test = Telephone::with('personnes', 'telephonables')->get();
+	// return var_dump($test[0]);
+	return var_dump($test->toArray());
+	return var_dump($test);
+});
 
-$router->get('/imap', 'Imap\ImapController@index');
+Route::get('pers', function(){
+	$test = Personne::with('telephones', 'telephonables')->get();
+	return var_dump($test->toArray());
+	return var_dump($test);
+});
+
+Route::get('ad', function(){
+	$test = Personne::with('adresses')->find(10);
+	return var_dump($test->toArray());
+	return var_dump($test);
+});
+
+Route::get('able', function(){
+	$test = Coordonnable::with('mails', 'telephones')->get();
+	return var_dump($test->toArray());
+	return var_dump($test);
+	// return var_dump($test[0]->personne);
+});
 
 
-/*
-|--------------------------------------------------------------------------
-| Authentication & Password Reset Controllers
-|--------------------------------------------------------------------------
-|
-| These two controllers handle the authentication of the users of your
-| application, as well as the functions necessary for resetting the
-| passwords for your users. You may modify or remove these files.
-|
-*/
+// Route::get('able', function(){
+// 	$test = Coordonnable::whereHas('personne', function($query){
+// 		$query->where('personnes.id', 'like', 7);
+// 	})->toSql();
+// 	return var_dump($test);
+// 	// return var_dump($test[0]->personne);
+// });
 
-$router->controllers([
+
+Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
-	]);
+]);

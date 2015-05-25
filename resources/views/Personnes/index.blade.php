@@ -1,67 +1,147 @@
-@extends('layouts.layout_main')
+	<?php $personne = $model; ?>
 
-@section('titre')
-@parent
-@stop
+	<div class="portrait {{{ $personne->qualites[0]->nom_sys }}}" ondblClick = "javascript:document.location.href='personne/{!! $personne['id'] !!}/edit';">
 
+		<!-- Qualité-->
+		@if(!$personne->qualites[0]->id == 0)
 
+			@foreach ($personne->qualites as $qualite)
+				<?php $qualite_classe = ""; ?>
 
-@section('topcontent1')
-<h1 class="titrepage">{{$titre_page}}</h1>
-@stop
+				@if($qualite->appel_structure)
+					<?php $structure_lied = ($qualite->structure_lied) ? : "non défini"; ?>
+					<?php $qualite_classe = ($qualite->structure_lied) ? "" : "indefini"; ?>
+				@endif
 
+				<p class="encadred2{!! $qualite_classe !!}">
+					@if($qualite->rang == 1)
+						<span class="qualite">
+					@else
+						<span class="qualite">
+					@endif
+				{!! $qualite->libelle !!}
 
-@section('topcontent2')
-@stop
+				@if($qualite->id == 1)
+					en nom propre
+				@endif
 
+				@if($qualite->id == 3)
+					: <br />
+					{!! $structure_lied !!}
+				@endif
+				</span>
+				</p>
+			@endforeach
+		@else
+			<p class="indefini">
+			Qualité à définir
+			</p>
+		@endif
 
-@section('contenu')
-<div class="offset3 span11">
-	@foreach($personnes as $personne)
-
-	<div class="portrait" ondblClick = "javascript:document.location.href='personne/{!!$personne['id']!!}/edit';">
-
-		<h3 class="{{{$personne['nomcomplet_class']}}}">
-			{!! $personne['nomcomplet'] !!}
+		<!-- Nom -->
+		<h3 class="nom {!! $personne->nom_complet_class !!}">
+			{!! $personne->nom_complet !!}
+			{!! $personne->nom_complet_class !!}
 		</h3>
 
+
+
 		<!-- Adresse -->
-		@if(!empty($personne['adresses']))
-		@foreach ($personne['adresses'] as $adresse)
-		<p class="">
-			{{{$adresse['ad1']}}}  {{{$adresse['ad2']}}}<br />{{{$adresse['cp']}}} {{{$adresse['ville']}}}
-		</p>
-		@endforeach
+		@if(!$personne->adresses[0]->id == 0)
+
+			@foreach ($personne->adresses as $adresse)
+
+				@if($adresse->etiquette)
+					{!! $adresse->etiquette !!} : 
+				@endif
+
+				<p class="encadred">
+				{{{$adresse['ad1']}}}<br />
+				@if($adresse['ad2'])
+					{{{$adresse['ad2']}}}<br />
+				@endif
+				{{{$adresse['cp']}}} {{{$adresse['ville']}}}
+				</p>
+			@endforeach
 		@else
-		<p class="indefini">
-			Adresse manquante
-		</p>
+			<p class="indefini">
+				Adresse manquante
+			</p>
 		@endif
 
-		<!-- Contact -->
-		@if(!empty($personne['contacts']))
-		@foreach ($personne['contacts'] as $contact)
-		<p class="">
-			{{{$contact['ad1']}}}  {{{$contact['ad2']}}} {{{$contact['cp']}}} {{{$contact['ville']}}}
-		</p>
-		@endforeach
-		@else
-		<p class="indefini">
-			Coordonnées manquantes
-		</p>
-		@endif
 
-		<!-- Statut -->
-		@if($personne['statut'] == '???')
-		<p class="{{{$personne['statut_class']}}}">
-			Statut indéfini !
-		</p>
-		@endif
-	</div>
+		<!-- telephones -->
+		@if(!$personne->telephones[0]->id == 0)
 
-	@endforeach
-</div>
+		<div class="encadred">
+
+			<p>
+				@foreach ($personne->telephones as $telephone)
+
+					@if($telephone->rang == 1)
+						<span class="telephone principal">
+					@else
+						<span class="telephone">
+					@endif
+
+					@if($telephone->pivot->etiquette)
+						{!! $telephone->pivot->etiquette !!} : 
+					@endif
+					{!!$telephone->valeur !!}
+					</span>
+					@if($telephone->pivot->note)
+						<br />
+						<span class="note">
+							{!! $telephone->pivot->note !!}
+						</span>
+					@endif
+					<br />
+				@endforeach
+
+				</p>
+			</div>
+			@else
+			<p class="indefini">
+				Téléphone inconnu
+			</p>
+			@endif
+
+
+			<!-- mails -->
+			@if(!$personne->mails[0]->id == 0)
+
+			<div class="encadred">
+				<p>
+					@foreach ($personne->mails as $mail)
+
+					@if($mail->rang == 1)
+					<span class="mail principal">
+						@else
+						<span class="mail">
+							@endif
+							@if($mail->pivot->etiquette)
+							{!! $mail->pivot->etiquette !!} : 
+							@endif
+							{!!$mail->valeur !!}
+						</span>
+						@if($mail->pivot->note)
+						<br />
+						<span class="note">
+							{!! $mail->pivot->note !!}
+						</span>
+						@endif
+						<br />
+						@endforeach
+					</p>
+				</div>
+				@else
+				<p class="indefini">
+					Mail inconnu
+				</p>
+				@endif
 
 
 
-@stop
+
+				{!! $personne['id'] !!} 
+			</div>

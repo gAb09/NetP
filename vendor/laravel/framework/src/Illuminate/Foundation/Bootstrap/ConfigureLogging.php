@@ -2,7 +2,6 @@
 
 use Illuminate\Log\Writer;
 use Monolog\Logger as Monolog;
-use Monolog\Handler\SyslogHandler;
 use Illuminate\Contracts\Foundation\Application;
 
 class ConfigureLogging {
@@ -91,4 +90,16 @@ class ConfigureLogging {
 		$log->useSyslog('laravel');
 	}
 
+	/**
+	 * Configure the Monolog handlers for the application.
+	 *
+	 * @param  \Illuminate\Contracts\Foundation\Application  $app
+	 * @param  \Illuminate\Log\Writer  $log
+	 * @return void
+	 */
+	protected function configureErrorlogHandler(Application $app, Writer $log)
+	{
+		$log->useErrorLog();
+	}
+	
 }

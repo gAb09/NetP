@@ -42,8 +42,8 @@ interface PasswordBroker {
 	/**
 	 * Send a password reset link to a user.
 	 *
-	 * @param  array     $credentials
-	 * @param  \Closure  $callback
+	 * @param  array  $credentials
+	 * @param  \Closure|null  $callback
 	 * @return string
 	 */
 	public function sendResetLink(array $credentials, Closure $callback = null);
@@ -64,5 +64,13 @@ interface PasswordBroker {
 	 * @return void
 	 */
 	public function validator(Closure $callback);
+
+	/**
+	 * Determine if the passwords match for the request.
+	 *
+	 * @param  array  $credentials
+	 * @return bool
+	 */
+	public function validateNewPassword(array $credentials);
 
 }

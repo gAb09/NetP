@@ -5,9 +5,9 @@ namespace League\Flysystem\Plugin;
 class ListFiles extends AbstractPlugin
 {
     /**
-     * Get the method name
+     * Get the method name.
      *
-     * @return  string
+     * @return string
      */
     public function getMethod()
     {
@@ -15,7 +15,7 @@ class ListFiles extends AbstractPlugin
     }
 
     /**
-     * List all files in the directory
+     * List all files in the directory.
      *
      * @param string $directory
      * @param bool   $recursive
@@ -30,6 +30,6 @@ class ListFiles extends AbstractPlugin
             return $object['type'] === 'file';
         };
 
-        return array_filter($contents, $filter);
+        return array_values(array_filter($contents, $filter));
     }
 }

@@ -1,17 +1,132 @@
-.indefini {
+.indefiniTxt {
 	color:#F36;
+}
+
+
+.fiche {
+	display: inline-table;
+	margin: 5px;
+	text-align: center;
+	width: 22%;
+}
+
+.flexcontainer {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	align-items: stretch;
 }
 
 
 .portrait {
 	background-color: #fed;
-	display: inline-table;
+	border: solid;
+	border-width: 10px;
+	border-color: #fed;
+	/*display: inline-table;*/
 	margin: 5px;
 	text-align: center;
-	width: 24%;
+	flex-grow: 1;
+	min-width: 220px;
+	min-height: 150px;
+}
+
+.portrait .nom {
+	margin-top: -5px;
 }
 
 .page {
 	/*background-color: #888;*/
 	height: 300px;
+}
+
+.coordonnees {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	align-items: stretch;
+}
+
+.encadred {
+	background-color: rgba(255, 255, 255, 0.6);
+}
+
+.encadred2 {
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+.principal {
+	font-weight: bold;
+}
+
+.adhpro {
+	background-color: #60ae59;
+	border-color: #60ae59;
+	/*order : 2;*/
+	/*color: #090;*/
+}
+
+.adhprovia {
+	background-color: #8ad883;
+	border-color: #8ad883;
+	/*order : 2;*/
+	/*color: #090;*/
+}
+
+.adhconso {
+	background-color: #61c1e4;
+	border-color: #61c1e4;
+	/*order : 1;*/
+	/*color: #090;*/
+}
+
+.adholdpro {
+	background-color: #dcffd7;
+	border-color: #dcffd7;
+	/*order : 3;*/
+	/*color: #009;*/
+}
+
+.adholdconso {
+	background-color: #ddf0f1;
+	border-color: #ddf0f1;
+	/*order : 3;*/
+	/*color: #009;*/
+}
+
+.indefini {
+	background-color: #EF3939;
+	border-color: #EF3939;
+	color: #FFF;
+}
+
+form.edit {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+}
+
+form.edit fieldset{
+	margin: 8px;
+	background-color: #CCC;
+}
+
+fieldset label {
+	display:block;
+	float: left;
+	width: 100px;
+	text-align: right;
+}
+
+.encadred .note {
+	/*background-color: #FFF;*/
+	/*color: #666;*/
+	/*position: relative;*/
+	/*display:none;*/
+}
+
+.encadred:hover .note {
+	position: absolute;
+	/*display:inline;*/
 }

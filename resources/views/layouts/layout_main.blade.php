@@ -26,21 +26,21 @@
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
-	<script src="/ckeditor/ckeditor.js"></script>
-</head>
+		<![endif]-->
+        <script src="/ckeditor/ckeditor.js"></script>
+	</head>
 
 
 
-<body @section('body')>
-	@show
+	<body @section('body')>
+		@show
 
 
 		<!-- - - - - - - - - - - - - - - - MENU  - - - - - - - - - - - - - - -->
-@include('partials.static_menu')
+		@include('partials.static_menu')
 
 		<!-- - - - - - - - - - - - - - - - MESSAGES  - - - - - - - - - - - - - - -->
-@include('partials.errors.basic')
+		@include('partials.errors.basic')
 
 		<!-- - - - - - - - - - - - - - - - TOP CONTENT (2 zones) - - - - - - - - - - - - - - -->
 		<div class="row-fluid" style="padding-bottom:5px">
@@ -54,7 +54,7 @@
 			</div> 
 		</div>
 
-		<!-- - - - - - - - - - - - - - - - CONTENU - - - - - - - - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - -   CONTENU   - - - - - - - - - - - - - - -->
 
 
 		<div class="row-fluid">
@@ -64,7 +64,14 @@
 		</div>
 
 
-		<!-- - - - - - - - - - - - - - - - FOOTER - - - - - - - - - - - - - - -->
+		<!-- - - - - - - - - - - - - - - -   ZAPETTE   - - - - - - - - - - - - - - -->
+
+		<div class="zapette">
+			@section('zapette')
+			@show
+		</div>
+
+		<!-- - - - - - - - - - - - - - - -   FOOTER   - - - - - - - - - - - - - - -->
 
 		<footer>
 			<hr>
@@ -72,9 +79,11 @@
 		</footer>
 
 
-		
-		@section('script')
+		<!-- - - - - - - - - - - - - - - -   SCRIPTS   - - - - - - - - - - - - - - -->
+
+		@section('scripts')
 
 		@show
+
 	</body>
 	</html>

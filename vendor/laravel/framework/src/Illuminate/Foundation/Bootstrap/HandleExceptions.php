@@ -1,8 +1,6 @@
 <?php namespace Illuminate\Foundation\Bootstrap;
 
 use ErrorException;
-use Symfony\Component\Debug\ErrorHandler;
-use Symfony\Component\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -49,6 +47,8 @@ class HandleExceptions {
 	 * @param  int  $line
 	 * @param  array  $context
 	 * @return void
+	 *
+	 * @throws \ErrorException
 	 */
 	public function handleError($level, $message, $file = '', $line = 0, $context = array())
 	{
@@ -111,10 +111,8 @@ class HandleExceptions {
 	 */
 	public function handleShutdown()
 	{
-		if ( ! is_null($error = error_get_last()))
+		if ( ! is_null($error = error_get_last()) && $this->isFatal($error['type']))
 		{
-			if ( ! $this->isFatal($error['type'])) return;
-
 			$this->handleException($this->fatalExceptionFromError($error));
 		}
 	}

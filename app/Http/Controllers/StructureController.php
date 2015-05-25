@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
-use App\Structure;
+use App\Gestion\StructureG;
+use App\Gestion\AdresseG;
+use App\Gestion\QualiteG;
 
 class StructureController extends Controller {
 
@@ -8,10 +10,14 @@ class StructureController extends Controller {
    *
    * @return Response
    */
-  public function index()
+  public function index(StructureG $structuresG)
   {
-    $adresses = Structure::with('adresse')->get()->toArray();
-    return view('adresses')->with(compact('adresses'));
+    $structures = $structuresG->getAll();
+    return view('Structures.index')
+    ->with(compact('structures'))
+    ->with('title', 'Les structures')
+    ->with('titre_page', 'Structures')
+    ;
   }
 
   /**
@@ -51,10 +57,27 @@ class StructureController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function edit($id)
-  {
-    
+  public function edit($id, StructureG $structuresG, AdresseG $adresseG, QualiteG $qualiteG){
+    dd("édition de la structure id = $id");
+    $structure = $structuresG->edit($id);
+    $listAdresses = $structuresG->listAdresses();
+    $listCoordonnees = $structuresG->listCoordonnees();
+    $adresseCommuneWith = $adresseG->adresseCommuneWith($id, $structure->adresses->first()->id);
+    $listQualites = $structuresG->listQualites();
+
+    // return dd($structure);
+
+    return view('Structures.edit')
+    ->with('title', 'Modification d\'une fiche')
+    ->with('titre_page', 'Modification de la fiche de '.$structure->nom_complet)
+    ->with(compact('structure'))
+    ->with(compact('listAdresses'))
+    ->with(compact('listCoordonnees'))
+    ->with(compact('adresseCommuneWith'))
+    ->with(compact('listQualites'))
+    ;
   }
+
 
   /**
    * Update the specified resource in storage.

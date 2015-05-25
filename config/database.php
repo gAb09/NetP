@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
 	/*
 	|--------------------------------------------------------------------------
@@ -44,57 +44,47 @@ return array(
 	|
 	*/
 
-	'connections' => array(
+	'connections' => [
 
-		'sqlite' => array(
+		'sqlite' => [
 			'driver'   => 'sqlite',
-			'database' => __DIR__.'/../database/production.sqlite',
+			'database' => storage_path().'/database.sqlite',
 			'prefix'   => '',
-		),
+		],
 
-		'mysql' => array(
+		'mysql' => [
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'gbom_netp_dev',
-			'username'  => 'gbom_NatureP',
-			'password'  => 'N4tu73&P',
+			'host'      => env('MYSQL_DB_HOST', 'localhost'),
+			'database'  => env('MYSQL_DB_DATABASE', 'forge'),
+			'username'  => env('MYSQL_DB_USERNAME', 'forge'),
+			'password'  => env('MYSQL_DB_PASSWORD', ''),
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
-		),
+			'strict'    => false,
+		],
 
-		'mysql2' => array(
-			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'sdf_bioarieg641',
-			'username'  => 'root',
-			'password'  => 'root',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
-		),
-
-		'pgsql' => array(
+		'pgsql' => [
 			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'database',
-			'username' => 'root',
-			'password' => '',
+			'host'     => env('DB_HOST', 'localhost'),
+			'database' => env('DB_DATABASE', 'forge'),
+			'username' => env('DB_USERNAME', 'forge'),
+			'password' => env('DB_PASSWORD', ''),
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',
-		),
+		],
 
-		'sqlsrv' => array(
+		'sqlsrv' => [
 			'driver'   => 'sqlsrv',
-			'host'     => 'localhost',
-			'database' => 'database',
-			'username' => 'root',
-			'password' => '',
+			'host'     => env('DB_HOST', 'localhost'),
+			'database' => env('DB_DATABASE', 'forge'),
+			'username' => env('DB_USERNAME', 'forge'),
+			'password' => env('DB_PASSWORD', ''),
 			'prefix'   => '',
-		),
+		],
 
-	),
+	],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -103,7 +93,7 @@ return array(
 	|
 	| This table keeps track of all the migrations that have already run for
 	| your application. Using this information, we can determine which of
-	| the migrations on disk have not actually be run in the databases.
+	| the migrations on disk haven't actually been run in the database.
 	|
 	*/
 
@@ -120,16 +110,16 @@ return array(
 	|
 	*/
 
-	'redis' => array(
+	'redis' => [
 
-		'cluster' => true,
+		'cluster' => false,
 
-		'default' => array(
+		'default' => [
 			'host'     => '127.0.0.1',
 			'port'     => 6379,
 			'database' => 0,
-		),
+		],
 
-	),
+	],
 
-);
+];

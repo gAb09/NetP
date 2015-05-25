@@ -4,6 +4,7 @@ use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Console\Application as Artisan;
+use Symfony\Component\Console\Input\ArgvInput;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 
@@ -33,7 +34,7 @@ class Kernel implements KernelContract {
 	/**
 	 * The bootstrap classes for the application.
 	 *
-	 * @return void
+	 * @var array
 	 */
 	protected $bootstrappers = [
 		'Illuminate\Foundation\Bootstrap\DetectEnvironment',
@@ -100,6 +101,18 @@ class Kernel implements KernelContract {
 	}
 
 	/**
+	 * Terminate the application.
+	 *
+	 * @param  \Symfony\Component\Console\Input\InputInterface  $input
+	 * @param  int  $status
+	 * @return void
+	 */
+	public function terminate($input, $status)
+	{
+		$this->app->terminate();
+	}
+
+	/**
 	 * Define the application's command schedule.
 	 *
 	 * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
@@ -121,6 +134,11 @@ class Kernel implements KernelContract {
 	{
 		$this->bootstrap();
 
+		// If we are calling a arbitary command from within the application, we will load
+		// all of the available deferred providers which will make all of the commands
+		// available to an application. Otherwise the command will not be available.
+		$this->app->loadDeferredProviders();
+
 		return $this->getArtisan()->call($command, $parameters);
 	}
 
@@ -128,7 +146,7 @@ class Kernel implements KernelContract {
 	 * Queue the given console command.
 	 *
 	 * @param  string  $command
-	 * @param  array  $parameters
+	 * @param  array   $parameters
 	 * @return void
 	 */
 	public function queue($command, array $parameters = array())

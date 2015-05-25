@@ -5,10 +5,11 @@ namespace League\Flysystem\Adapter\Polyfill;
 trait StreamedReadingTrait
 {
     /**
-     * Get the contents of a file in a stream
+     * Get the contents of a file in a stream.
      *
-     * @param   string          $path
-     * @return  resource|false  false when not found, or a resource
+     * @param string $path
+     *
+     * @return resource|false false when not found, or a resource
      */
     public function readStream($path)
     {
@@ -19,8 +20,8 @@ trait StreamedReadingTrait
         $stream = tmpfile();
         fwrite($stream, $data['contents']);
         rewind($stream);
-
         $data['stream'] = $stream;
+        unset($data['contents']);
 
         return $data;
     }

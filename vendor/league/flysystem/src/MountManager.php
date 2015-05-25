@@ -8,13 +8,12 @@ use League\Flysystem\Plugin\PluginNotFoundException;
 use LogicException;
 
 /**
- * Class MountManager
+ * Class MountManager.
  *
  * Proxies methods to Filesystem (@see __call):
  *
  * @method AdapterInterface getAdapter($prefix)
  * @method Config getConfig($prefix)
- * @method CacheInterface getCache($prefix)
  * @method bool has($path)
  * @method bool write($path, $contents, array $config = [])
  * @method bool writeStream($path, $resource, array $config = [])
@@ -29,7 +28,6 @@ use LogicException;
  * @method bool delete($path)
  * @method bool deleteDir($dirname)
  * @method bool createDir($dirname, $config = [])
- * @method array listContents($directory = '', $recursive = false)
  * @method array listFiles($directory = '', $recursive = false)
  * @method array listPaths($directory = '', $recursive = false)
  * @method array listWith(array $keys = array(), $directory = '', $recursive = false)
@@ -45,33 +43,32 @@ use LogicException;
  * @method assertPresent($path)
  * @method assertAbsent($path)
  * @method Filesystem addPlugin(PluginInterface $plugin)
- *
- * @package League\Flysystem
  */
 class MountManager
 {
     use PluggableTrait;
 
     /**
-     * @var  array  $filesystems
+     * @var array
      */
-    protected $filesystems = array();
+    protected $filesystems = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param   array  $filesystems
+     * @param array $filesystems
      */
-    public function __construct(array $filesystems = array())
+    public function __construct(array $filesystems = [])
     {
         $this->mountFilesystems($filesystems);
     }
 
     /**
-     * Mount filesystems
+     * Mount filesystems.
      *
-     * @param   array  $filesystems  [:prefix => Filesystem,]
-     * @return  $this
+     * @param array $filesystems [:prefix => Filesystem,]
+     *
+     * @return $this
      */
     public function mountFilesystems(array $filesystems)
     {
@@ -83,11 +80,12 @@ class MountManager
     }
 
     /**
-     * Mount filesystems
+     * Mount filesystems.
      *
-     * @param   string               $prefix
-     * @param   FilesystemInterface  $filesystem
-     * @return  $this
+     * @param string              $prefix
+     * @param FilesystemInterface $filesystem
+     *
+     * @return $this
      */
     public function mountFilesystem($prefix, FilesystemInterface $filesystem)
     {
@@ -101,26 +99,29 @@ class MountManager
     }
 
     /**
-     * Get the filesystem with the corresponding prefix
+     * Get the filesystem with the corresponding prefix.
      *
-     * @param    string               $prefix
-     * @return   FilesystemInterface
-     * @throws   LogicException
+     * @param string $prefix
+     *
+     * @throws LogicException
+     *
+     * @return FilesystemInterface
      */
     public function getFilesystem($prefix)
     {
         if (! isset($this->filesystems[$prefix])) {
-            throw new LogicException('No filesystem mounted with prefix ' . $prefix);
+            throw new LogicException('No filesystem mounted with prefix '.$prefix);
         }
 
         return $this->filesystems[$prefix];
     }
 
     /**
-     * Retrieve the prefix form an arguments array
+     * Retrieve the prefix form an arguments array.
      *
-     * @param   array  $arguments
-     * @return  array  [:prefix, :arguments]
+     * @param array $arguments
+     *
+     * @return array [:prefix, :arguments]
      */
     public function filterPrefix(array $arguments)
     {
@@ -135,21 +136,42 @@ class MountManager
         }
 
         if (! preg_match('#^[a-zA-Z0-9]+\:\/\/.*#', $path)) {
-            throw new InvalidArgumentException('No prefix detected in for path: ' . $path);
+            throw new InvalidArgumentException('No prefix detected in for path: '.$path);
         }
 
         list($prefix, $path) = explode('://', $path, 2);
         array_unshift($arguments, $path);
 
-        return array($prefix, $arguments);
+        return [$prefix, $arguments];
     }
 
     /**
-     * Call forwarder
+     * @param string $directory
+     * @param bool   $recursive
      *
-     * @param   string  $method
-     * @param   array   $arguments
-     * @return  mixed
+     * @return array
+     */
+    public function listContents($directory = '', $recursive = false)
+    {
+        list($prefix, $arguments) = $this->filterPrefix([$directory]);
+        $filesystem = $this->getFilesystem($prefix);
+        $directory = array_shift($arguments);
+        $result = $filesystem->listContents($directory, $recursive);
+
+        foreach ($result as &$file) {
+            $file['filesystem'] = $prefix;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Call forwarder.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
      */
     public function __call($method, $arguments)
     {
@@ -163,7 +185,7 @@ class MountManager
             // Let it pass, it's ok, don't panic.
         }
 
-        $callback = array($filesystem, $method);
+        $callback = [$filesystem, $method];
 
         return call_user_func_array($callback, $arguments);
     }
@@ -171,6 +193,7 @@ class MountManager
     /**
      * @param $from
      * @param $to
+     *
      * @return bool
      */
     public function copy($from, $to)

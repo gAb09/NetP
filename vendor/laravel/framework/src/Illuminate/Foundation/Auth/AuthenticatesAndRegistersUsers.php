@@ -21,23 +21,9 @@ trait AuthenticatesAndRegistersUsers {
 	protected $registrar;
 
 	/**
-	 * Create a new authentication controller instance.
-	 *
-	 * @param  Guard  $auth
-	 * @return void
-	 */
-	public function __construct(Guard $auth, Registrar $registrar)
-	{
-		$this->auth = $auth;
-		$this->registrar = $registrar;
-
-		$this->middleware('guest', ['except' => 'getLogout']);
-	}
-
-	/**
 	 * Show the application registration form.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Http\Response
 	 */
 	public function getRegister()
 	{
@@ -47,8 +33,8 @@ trait AuthenticatesAndRegistersUsers {
 	/**
 	 * Handle a registration request for the application.
 	 *
-	 * @param  RegisterRequest  $request
-	 * @return Response
+	 * @param  \Illuminate\Foundation\Http\FormRequest  $request
+	 * @return \Illuminate\Http\Response
 	 */
 	public function postRegister(Request $request)
 	{
@@ -92,11 +78,11 @@ trait AuthenticatesAndRegistersUsers {
 
 		if ($this->auth->attempt($credentials, $request->has('remember')))
 		{
-			return redirect($this->redirectPath());
+			return redirect()->intended($this->redirectPath());
 		}
 
-		return redirect('/auth/login')
-					->withInput($request->only('email'))
+		return redirect($this->loginPath())
+					->withInput($request->only('email', 'remember'))
 					->withErrors([
 						'email' => 'These credentials do not match our records.',
 					]);
@@ -105,7 +91,7 @@ trait AuthenticatesAndRegistersUsers {
 	/**
 	 * Log the user out of the application.
 	 *
-	 * @return Response
+	 * @return \Illuminate\Http\Response
 	 */
 	public function getLogout()
 	{
@@ -121,7 +107,22 @@ trait AuthenticatesAndRegistersUsers {
 	 */
 	public function redirectPath()
 	{
+		if (property_exists($this, 'redirectPath'))
+		{
+			return $this->redirectPath;
+		}
+
 		return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
+	}
+
+	/**
+	 * Get the path to the login route.
+	 *
+	 * @return string
+	 */
+	public function loginPath()
+	{
+		return property_exists($this, 'loginPath') ? $this->loginPath : '/auth/login';
 	}
 
 }

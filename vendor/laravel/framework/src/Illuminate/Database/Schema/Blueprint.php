@@ -38,8 +38,8 @@ class Blueprint {
 	/**
 	 * Create a new schema blueprint.
 	 *
-	 * @param  string   $table
-	 * @param  \Closure  $callback
+	 * @param  string  $table
+	 * @param  \Closure|null  $callback
 	 * @return void
 	 */
 	public function __construct($table, Closure $callback = null)
@@ -574,6 +574,17 @@ class Blueprint {
 	}
 
 	/**
+	 * Create a new json column on the table.
+	 *
+	 * @param  string  $column
+	 * @return \Illuminate\Support\Fluent
+	 */
+	public function json($column)
+	{
+		return $this->addColumn('json', $column);
+	}
+
+	/**
 	 * Create a new date column on the table.
 	 *
 	 * @param  string  $column
@@ -666,6 +677,7 @@ class Blueprint {
 	 * Add the proper columns for a polymorphic table.
 	 *
 	 * @param  string  $name
+	 * @param  string|null  $indexName
 	 * @return void
 	 */
 	public function morphs($name, $indexName = null)

@@ -2,6 +2,7 @@
 
 use Closure;
 use Carbon\Carbon;
+use LogicException;
 use Cron\CronExpression;
 use Illuminate\Contracts\Mail\Mailer;
 use Symfony\Component\Process\Process;
@@ -74,7 +75,7 @@ class Event {
 	protected $output = '/dev/null';
 
 	/**
-	 * The e-mail addressses the command output should be sent to.
+	 * The e-mail addresses the command output should be sent to.
 	 *
 	 * @var array
 	 */
@@ -188,10 +189,8 @@ class Event {
 		{
 			return 'Scheduled Job Output ('.$this->description.')';
 		}
-		else
-		{
-			return 'Scheduled Job Output';
-		}
+
+		return 'Scheduled Job Output';
 	}
 
 	/**
@@ -508,7 +507,7 @@ class Event {
 	}
 
 	/**
-	 * Schedule the event to run every ten minutes.
+	 * Schedule the event to run every thirty minutes.
 	 *
 	 * @return $this
 	 */
@@ -627,12 +626,14 @@ class Event {
 	 *
 	 * @param  array|dynamic  $addresses
 	 * @return $this
+	 *
+	 * @throws \LogicException
 	 */
 	public function emailOutputTo($addresses)
 	{
-		if (is_null($this->output))
+		if (is_null($this->output) || $this->output == '/dev/null')
 		{
-			throw new \LogicException("Must direct output to a file in order to e-mail results.");
+			throw new LogicException("Must direct output to a file in order to e-mail results.");
 		}
 
 		$this->emailAddresses = is_array($addresses) ? $addresses : func_get_args();

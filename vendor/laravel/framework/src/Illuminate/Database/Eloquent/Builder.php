@@ -105,13 +105,22 @@ class Builder {
 	 *
 	 * @param  mixed  $id
 	 * @param  array  $columns
-	 * @return \Illuminate\Database\Eloquent\Model|static
+	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
 	 *
 	 * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
 	 */
 	public function findOrFail($id, $columns = array('*'))
 	{
-		if ( ! is_null($model = $this->find($id, $columns))) return $model;
+		$result = $this->find($id, $columns);
+
+		if (is_array($id))
+		{
+			if (count($result) == count(array_unique($id))) return $result;
+		}
+		elseif ( ! is_null($result))
+		{
+			return $result;
+		}
 
 		throw (new ModelNotFoundException)->setModel(get_class($this->model));
 	}
@@ -555,11 +564,16 @@ class Builder {
 	 * @param  string  $operator
 	 * @param  int     $count
 	 * @param  string  $boolean
-	 * @param  \Closure  $callback
+	 * @param  \Closure|null  $callback
 	 * @return \Illuminate\Database\Eloquent\Builder|static
 	 */
-	public function has($relation, $operator = '>=', $count = 1, $boolean = 'and', $callback = null)
+	public function has($relation, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null)
 	{
+		if (strpos($relation, '.') !== false)
+		{
+			return $this->hasNested($relation, $operator, $count, $boolean, $callback);
+		}
+
 		$relation = $this->getHasRelationQuery($relation);
 
 		$query = $relation->getRelationCountQuery($relation->getRelated()->newQuery(), $this);
@@ -570,17 +584,74 @@ class Builder {
 	}
 
 	/**
-	 * Add a relationship count condition to the query with where clauses.
+	 * Add nested relationship count conditions to the query.
 	 *
-	 * @param  string  $relation
-	 * @param  \Closure  $callback
+	 * @param  string  $relations
 	 * @param  string  $operator
 	 * @param  int     $count
+	 * @param  string  $boolean
+	 * @param  \Closure  $callback
+	 * @return \Illuminate\Database\Eloquent\Builder|static
+	 */
+	protected function hasNested($relations, $operator = '>=', $count = 1, $boolean = 'and', $callback = null)
+	{
+		$relations = explode('.', $relations);
+
+		// In order to nest "has", we need to add count relation constraints on the
+		// callback Closure. We'll do this by simply passing the Closure its own
+		// reference to itself so it calls itself recursively on each segment.
+		$closure = function ($q) use (&$closure, &$relations, $operator, $count, $boolean, $callback)
+		{
+			if (count($relations) > 1)
+			{
+				$q->whereHas(array_shift($relations), $closure);
+			}
+			else
+			{
+				$q->has(array_shift($relations), $operator, $count, $boolean, $callback);
+			}
+		};
+
+		return $this->whereHas(array_shift($relations), $closure);
+	}
+
+	/**
+	 * Add a relationship count condition to the query.
+	 *
+	 * @param  string  $relation
+	 * @param  string  $boolean
+	 * @param  \Closure|null  $callback
+	 * @return \Illuminate\Database\Eloquent\Builder|static
+	 */
+	public function doesntHave($relation, $boolean = 'and', Closure $callback = null)
+	{
+		return $this->has($relation, '<', 1, $boolean, $callback);
+	}
+
+	/**
+	 * Add a relationship count condition to the query with where clauses.
+	 *
+	 * @param  string    $relation
+	 * @param  \Closure  $callback
+	 * @param  string    $operator
+	 * @param  int       $count
 	 * @return \Illuminate\Database\Eloquent\Builder|static
 	 */
 	public function whereHas($relation, Closure $callback, $operator = '>=', $count = 1)
 	{
 		return $this->has($relation, $operator, $count, 'and', $callback);
+	}
+
+	/**
+	 * Add a relationship count condition to the query with where clauses.
+	 *
+	 * @param  string  $relation
+	 * @param  \Closure|null  $callback
+	 * @return \Illuminate\Database\Eloquent\Builder|static
+	 */
+	public function whereDoesntHave($relation, Closure $callback = null)
+	{
+		return $this->doesntHave($relation, 'and', $callback);
 	}
 
 	/**
@@ -599,10 +670,10 @@ class Builder {
 	/**
 	 * Add a relationship count condition to the query with where clauses and an "or".
 	 *
-	 * @param  string  $relation
+	 * @param  string    $relation
 	 * @param  \Closure  $callback
-	 * @param  string  $operator
-	 * @param  int     $count
+	 * @param  string    $operator
+	 * @param  int       $count
 	 * @return \Illuminate\Database\Eloquent\Builder|static
 	 */
 	public function orWhereHas($relation, Closure $callback, $operator = '>=', $count = 1)
@@ -645,6 +716,8 @@ class Builder {
 		// where clauses the developer may have put in the relationship function over to
 		// the has query, and then copy the bindings from the "has" query to the main.
 		$relationQuery = $relation->getBaseQuery();
+
+		$hasQuery = $hasQuery->getModel()->removeGlobalScopes($hasQuery);
 
 		$hasQuery->mergeWheres(
 			$relationQuery->wheres, $relationQuery->getBindings()
@@ -737,8 +810,8 @@ class Builder {
 
 			if ( ! isset($results[$last = implode('.', $progress)]))
 			{
- 				$results[$last] = function() {};
- 			}
+				$results[$last] = function() {};
+			}
 		}
 
 		return $results;
@@ -748,7 +821,7 @@ class Builder {
 	 * Call the given model scope on the underlying model.
 	 *
 	 * @param  string  $scope
-	 * @param  array  $parameters
+	 * @param  array   $parameters
 	 * @return \Illuminate\Database\Query\Builder
 	 */
 	protected function callScope($scope, $parameters)
@@ -772,11 +845,13 @@ class Builder {
 	 * Set the underlying query builder instance.
 	 *
 	 * @param  \Illuminate\Database\Query\Builder  $query
-	 * @return void
+	 * @return $this
 	 */
 	public function setQuery($query)
 	{
 		$this->query = $query;
+
+		return $this;
 	}
 
 	/**
@@ -793,11 +868,13 @@ class Builder {
 	 * Set the relationships being eagerly loaded.
 	 *
 	 * @param  array  $eagerLoad
-	 * @return void
+	 * @return $this
 	 */
 	public function setEagerLoads(array $eagerLoad)
 	{
 		$this->eagerLoad = $eagerLoad;
+
+		return $this;
 	}
 
 	/**
@@ -828,7 +905,7 @@ class Builder {
 	/**
 	 * Extend the builder with a given callback.
 	 *
-	 * @param  string  $name
+	 * @param  string    $name
 	 * @param  \Closure  $callback
 	 * @return void
 	 */

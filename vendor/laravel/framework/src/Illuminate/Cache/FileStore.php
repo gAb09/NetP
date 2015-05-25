@@ -1,8 +1,10 @@
 <?php namespace Illuminate\Cache;
 
+use Exception;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Cache\Store;
 
-class FileStore implements StoreInterface {
+class FileStore implements Store {
 
 	/**
 	 * The Illuminate Filesystem instance.
@@ -64,7 +66,7 @@ class FileStore implements StoreInterface {
 		{
 			$expire = substr($contents = $this->files->get($path), 0, 10);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			return array('data' => null, 'time' => null);
 		}
@@ -118,7 +120,7 @@ class FileStore implements StoreInterface {
 		{
 			$this->files->makeDirectory(dirname($path), 0777, true, true);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			//
 		}
@@ -191,9 +193,12 @@ class FileStore implements StoreInterface {
 	 */
 	public function flush()
 	{
-		foreach ($this->files->directories($this->directory) as $directory)
+		if ($this->files->isDirectory($this->directory))
 		{
-			$this->files->deleteDirectory($directory);
+			foreach ($this->files->directories($this->directory) as $directory)
+			{
+				$this->files->deleteDirectory($directory);
+			}
 		}
 	}
 

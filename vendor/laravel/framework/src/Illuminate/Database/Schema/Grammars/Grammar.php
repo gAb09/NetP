@@ -112,14 +112,13 @@ abstract class Grammar extends BaseGrammar {
 	 * Compile the blueprint's column definitions.
 	 *
 	 * @param  \Illuminate\Database\Schema\Blueprint $blueprint
-	 * @param  bool $change
 	 * @return array
 	 */
-	protected function getColumns(Blueprint $blueprint, $change = false)
+	protected function getColumns(Blueprint $blueprint)
 	{
 		$columns = array();
 
-		foreach ($change ? $blueprint->getChangedColumns() : $blueprint->getAddedColumns() as $column)
+		foreach ($blueprint->getAddedColumns() as $column)
 		{
 			// Each of the column types have their own compiler functions which are tasked
 			// with turning the column definition into its SQL format for this platform
@@ -226,16 +225,13 @@ abstract class Grammar extends BaseGrammar {
 	}
 
 	/**
-	 * Wrap a value in keyword identifiers.
-	 *
-	 * @param  string  $value
-	 * @return string
+	 * {@inheritdoc}
 	 */
-	public function wrap($value)
+	public function wrap($value, $prefixAlias = false)
 	{
 		if ($value instanceof Fluent) $value = $value->name;
 
-		return parent::wrap($value);
+		return parent::wrap($value, $prefixAlias);
 	}
 
 	/**
@@ -362,7 +358,7 @@ abstract class Grammar extends BaseGrammar {
 	 */
 	protected function getDoctrineColumnChangeOptions(Fluent $fluent)
 	{
-		$options = ['type' => Type::getType($fluent['type'])];
+		$options = ['type' => Type::getType($this->getType($fluent))];
 
 		if (in_array($fluent['type'], ['text', 'mediumText', 'longText']))
 		{

@@ -1,8 +1,9 @@
 <?php namespace Illuminate\Foundation\Http;
 
 use Exception;
-use Illuminate\Routing\Stack;
 use Illuminate\Routing\Router;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\TerminableMiddleware;
 use Illuminate\Contracts\Http\Kernel as KernelContract;
@@ -19,14 +20,14 @@ class Kernel implements KernelContract {
 	/**
 	 * The router instance.
 	 *
-	 * @param \Illuminate\Routing\Router
+	 * @var \Illuminate\Routing\Router
 	 */
 	protected $router;
 
 	/**
 	 * The bootstrap classes for the application.
 	 *
-	 * @return void
+	 * @var array
 	 */
 	protected $bootstrappers = [
 		'Illuminate\Foundation\Bootstrap\DetectEnvironment',
@@ -56,6 +57,7 @@ class Kernel implements KernelContract {
 	 * Create a new HTTP kernel instance.
 	 *
 	 * @param  \Illuminate\Contracts\Foundation\Application  $app
+	 * @param  \Illuminate\Routing\Router  $router
 	 * @return void
 	 */
 	public function __construct(Application $app, Router $router)
@@ -99,9 +101,11 @@ class Kernel implements KernelContract {
 	{
 		$this->app->instance('request', $request);
 
+		Facade::clearResolvedInstance('request');
+
 		$this->bootstrap();
 
-		return (new Stack($this->app))
+		return (new Pipeline($this->app))
 		            ->send($request)
 		            ->through($this->middleware)
 		            ->then($this->dispatchToRouter());
@@ -125,6 +129,8 @@ class Kernel implements KernelContract {
 				$instance->terminate($request, $response);
 			}
 		}
+
+		$this->app->terminate();
 	}
 
 	/**

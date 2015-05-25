@@ -3,14 +3,18 @@
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
+use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Routing\Registrar as RegistrarContract;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Router implements RegistrarContract {
+
+	use Macroable;
 
 	/**
 	 * The event dispatcher instance.
@@ -296,6 +300,20 @@ class Router implements RegistrarContract {
 	}
 
 	/**
+	 * Register an array of resource controllers.
+	 *
+	 * @param  array  $resources
+	 * @return void
+	 */
+	public function resources(array $resources)
+	{
+		foreach ($resources as $name => $controller)
+		{
+			$this->resource($name, $controller);
+		}
+	}
+
+	/**
 	 * Route a resource to a controller.
 	 *
 	 * @param  string  $name
@@ -479,9 +497,9 @@ class Router implements RegistrarContract {
 	/**
 	 * Create a new Route object.
 	 *
-	 * @param  array|string $methods
+	 * @param  array|string  $methods
 	 * @param  string  $uri
-	 * @param  mixed  $action
+	 * @param  mixed   $action
 	 * @return \Illuminate\Routing\Route
 	 */
 	protected function newRoute($methods, $uri, $action)
@@ -663,7 +681,7 @@ class Router implements RegistrarContract {
 	{
 		$middleware = $this->gatherRouteMiddlewares($route);
 
-		return (new Stack($this->container))
+		return (new Pipeline($this->container))
 		                ->send($request)
 		                ->through($middleware)
 		                ->then(function($request) use ($route)
@@ -866,7 +884,7 @@ class Router implements RegistrarContract {
 	 *
 	 * @param  string  $key
 	 * @param  string  $class
-	 * @param  \Closure  $callback
+	 * @param  \Closure|null  $callback
 	 * @return void
 	 *
 	 * @throws NotFoundHttpException
@@ -1107,7 +1125,7 @@ class Router implements RegistrarContract {
 	}
 
 	/**
-	 * Call the given route's before filters.
+	 * Call the given route's after filters.
 	 *
 	 * @param  \Illuminate\Routing\Route  $route
 	 * @param  \Illuminate\Http\Request  $request

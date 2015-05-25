@@ -22,20 +22,6 @@ trait ResetsPasswords {
 	protected $passwords;
 
 	/**
-	 * Create a new password controller instance.
-	 *
-	 * @param  PasswordBroker  $passwords
-	 * @return void
-	 */
-	public function __construct(Guard $auth, PasswordBroker $passwords)
-	{
-		$this->auth = $auth;
-		$this->passwords = $passwords;
-
-		$this->middleware('guest');
-	}
-
-	/**
 	 * Display the form to request a password reset link.
 	 *
 	 * @return Response
@@ -55,14 +41,29 @@ trait ResetsPasswords {
 	{
 		$this->validate($request, ['email' => 'required']);
 
-		switch ($response = $this->passwords->sendResetLink($request->only('email')))
+		$response = $this->passwords->sendResetLink($request->only('email'), function($m)
+		{
+			$m->subject($this->getEmailSubject());
+		});
+
+		switch ($response)
 		{
 			case PasswordBroker::RESET_LINK_SENT:
 				return redirect()->back()->with('status', trans($response));
 
 			case PasswordBroker::INVALID_USER:
-				return redirect()->back()->withErrors(['email' =>trans($response)]);
+				return redirect()->back()->withErrors(['email' => trans($response)]);
 		}
+	}
+
+	/**
+	 * Get the e-mail subject line to be used for the reset link email.
+	 *
+	 * @return string
+	 */
+	protected function getEmailSubject()
+	{
+		return isset($this->subject) ? $this->subject : 'Your Password Reset Link';
 	}
 
 	/**
@@ -127,6 +128,11 @@ trait ResetsPasswords {
 	 */
 	public function redirectPath()
 	{
+		if (property_exists($this, 'redirectPath'))
+		{
+			return $this->redirectPath;
+		}
+
 		return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
 	}
 

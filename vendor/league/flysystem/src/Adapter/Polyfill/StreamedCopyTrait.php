@@ -7,11 +7,12 @@ use League\Flysystem\Config;
 trait StreamedCopyTrait
 {
     /**
-     * Copy a file
+     * Copy a file.
      *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @return  boolean
+     * @param string $path
+     * @param string $newpath
+     *
+     * @return bool
      */
     public function copy($path, $newpath)
     {
@@ -21,7 +22,7 @@ trait StreamedCopyTrait
             return false;
         }
 
-        $result = $this->writeStream($newpath, $response['stream'], new Config);
+        $result = $this->writeStream($newpath, $response['stream'], new Config());
 
         if (is_resource($response['stream'])) {
             fclose($response['stream']);

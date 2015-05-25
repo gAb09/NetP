@@ -48,8 +48,8 @@
 			<td class="{{{$personne->nom_class}}}">
 				{!! $personne->nom !!}
 			</td>
-			<td class="{{{$personne->nomcomplet_class}}}">
-				{!! $personne->nomcomplet !!}
+			<td class="{{{$personne->nom_complet_class}}}">
+				{!! $personne->nom_complet !!}
 			</td>
 			<td class="{{{$personne->statut_class}}}">
 				{!! $personne->statut !!}

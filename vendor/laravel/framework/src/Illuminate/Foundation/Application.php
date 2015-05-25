@@ -1,23 +1,26 @@
 <?php namespace Illuminate\Foundation;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 use Illuminate\Routing\RoutingServiceProvider;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 
-class Application extends Container implements ApplicationContract {
+class Application extends Container implements ApplicationContract, HttpKernelInterface {
 
 	/**
 	 * The Laravel framework version.
 	 *
 	 * @var string
 	 */
-	const VERSION = '5.0-dev';
+	const VERSION = '5.0.5';
 
 	/**
 	 * The base path for the Laravel installation.
@@ -55,6 +58,13 @@ class Application extends Container implements ApplicationContract {
 	protected $bootedCallbacks = array();
 
 	/**
+	 * The array of terminating callbacks.
+	 *
+	 * @var array
+	 */
+	protected $terminatingCallbacks = array();
+
+	/**
 	 * All of the registered service providers.
 	 *
 	 * @var array
@@ -74,6 +84,20 @@ class Application extends Container implements ApplicationContract {
 	 * @var array
 	 */
 	protected $deferredServices = array();
+
+	/**
+	 * The custom storage path defined by the developer.
+	 *
+	 * @var string
+	 */
+	protected $storagePath;
+
+	/**
+	 * The environment file to load during bootstrapping.
+	 *
+	 * @var string
+	 */
+	protected $environmentFile = '.env';
 
 	/**
 	 * Create a new Illuminate application instance.
@@ -172,7 +196,7 @@ class Application extends Container implements ApplicationContract {
 	/**
 	 * Bind all of the application paths in the container.
 	 *
-	 * @return $this
+	 * @return void
 	 */
 	protected function bindPathsInContainer()
 	{
@@ -251,7 +275,45 @@ class Application extends Container implements ApplicationContract {
 	 */
 	public function storagePath()
 	{
-		return $this->basePath.'/storage';
+		return $this->storagePath ?: $this->basePath.'/storage';
+	}
+
+	/**
+	 * Set the storage directory.
+	 *
+	 * @param  string  $path
+	 * @return $this
+	 */
+	public function useStoragePath($path)
+	{
+		$this->storagePath = $path;
+
+		$this->instance('path.storage', $path);
+
+		return $this;
+	}
+
+	/**
+	 * Set the environment file to be loaded during bootstrapping.
+	 *
+	 * @param  string  $file
+	 * @return $this
+	 */
+	public function loadEnvironmentFrom($file)
+	{
+		$this->environmentFile = $file;
+
+		return $this;
+	}
+
+	/**
+	 * Get the environment file the application is using.
+	 *
+	 * @return string
+	 */
+	public function environmentFile()
+	{
+		return $this->environmentFile ?: '.env';
 	}
 
 	/**
@@ -330,7 +392,7 @@ class Application extends Container implements ApplicationContract {
 	 */
 	public function registerConfiguredProviders()
 	{
-		$manifestPath = $this['path.storage'].'/framework/services.json';
+		$manifestPath = $this->storagePath().'/framework/services.json';
 
 		(new ProviderRepository($this, new Filesystem, $manifestPath))
 		            ->load($this->config['app.providers']);
@@ -446,8 +508,13 @@ class Application extends Container implements ApplicationContract {
 	 * @param  string  $service
 	 * @return void
 	 */
-	protected function loadDeferredProvider($service)
+	public function loadDeferredProvider($service)
 	{
+		if ( ! isset($this->deferredServices[$service]))
+		{
+			return;
+		}
+
 		$provider = $this->deferredServices[$service];
 
 		// If the service provider has not already been loaded and registered we can
@@ -516,29 +583,6 @@ class Application extends Container implements ApplicationContract {
 	public function bound($abstract)
 	{
 		return isset($this->deferredServices[$abstract]) || parent::bound($abstract);
-	}
-
-	/**
-	 * "Extend" an abstract type in the container.
-	 *
-	 * (Overriding Container::extend)
-	 *
-	 * @param  string   $abstract
-	 * @param  \Closure  $closure
-	 * @return void
-	 *
-	 * @throws \InvalidArgumentException
-	 */
-	public function extend($abstract, Closure $closure)
-	{
-		$abstract = $this->getAlias($abstract);
-
-		if (isset($this->deferredServices[$abstract]))
-		{
-			$this->loadDeferredProvider($abstract);
-		}
-
-		return parent::extend($abstract, $closure);
 	}
 
 	/**
@@ -613,6 +657,34 @@ class Application extends Container implements ApplicationContract {
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function handle(SymfonyRequest $request, $type = self::MASTER_REQUEST, $catch = true)
+	{
+		return $this['Illuminate\Contracts\Http\Kernel']->handle(Request::createFromBase($request));
+	}
+
+	/**
+	 * Determine if the application configuration is cached.
+	 *
+	 * @return bool
+	 */
+	public function configurationIsCached()
+	{
+		return $this['files']->exists($this->getCachedConfigPath());
+	}
+
+	/**
+	 * Get the path to the configuration cache file.
+	 *
+	 * @return string
+	 */
+	public function getCachedConfigPath()
+	{
+		return $this['path.storage'].'/framework/config.php';
+	}
+
+	/**
 	 * Determine if the application routes are cached.
 	 *
 	 * @return bool
@@ -630,46 +702,6 @@ class Application extends Container implements ApplicationContract {
 	public function getCachedRoutesPath()
 	{
 		return $this['path.storage'].'/framework/routes.php';
-	}
-
-	/**
-	 * Determine if the application routes have been scanned.
-	 *
-	 * @return bool
-	 */
-	public function routesAreScanned()
-	{
-		return $this['files']->exists($this->getScannedRoutesPath());
-	}
-
-	/**
-	 * Get the path to the scanned routes file.
-	 *
-	 * @return string
-	 */
-	public function getScannedRoutesPath()
-	{
-		return $this['path.storage'].'/framework/routes.scanned.php';
-	}
-
-	/**
-	 * Determine if the application events have been scanned.
-	 *
-	 * @return bool
-	 */
-	public function eventsAreScanned()
-	{
-		return $this['files']->exists($this->getScannedEventsPath());
-	}
-
-	/**
-	 * Get the path to the scanned events file.
-	 *
-	 * @return string
-	 */
-	public function getScannedEventsPath()
-	{
-		return $this['path.storage'].'/framework/events.scanned.php';
 	}
 
 	/**
@@ -693,7 +725,7 @@ class Application extends Container implements ApplicationContract {
 	 */
 	public function isDownForMaintenance()
 	{
-		return file_exists($this['config']['app.manifest'].'/down');
+		return file_exists($this->storagePath().'/framework/down');
 	}
 
 	/**
@@ -725,6 +757,32 @@ class Application extends Container implements ApplicationContract {
 		}
 
 		throw new HttpException($code, $message, null, $headers);
+	}
+
+	/**
+	 * Register a terminating callback with the application.
+	 *
+	 * @param  \Closure  $callback
+	 * @return $this
+	 */
+	public function terminating(Closure $callback)
+	{
+		$this->terminatingCallbacks[] = $callback;
+
+		return $this;
+	}
+
+	/**
+	 * Terminate the application.
+	 *
+	 * @return void
+	 */
+	public function terminate()
+	{
+		foreach ($this->terminatingCallbacks as $terminating)
+		{
+			$this->call($terminating);
+		}
 	}
 
 	/**

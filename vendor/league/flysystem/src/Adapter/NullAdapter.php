@@ -13,10 +13,11 @@ class NullAdapter extends AbstractAdapter
     use StreamedCopyTrait;
 
     /**
-     * Check whether a file is present
+     * Check whether a file is present.
      *
-     * @param   string   $path
-     * @return  boolean
+     * @param string $path
+     *
+     * @return bool
      */
     public function has($path)
     {
@@ -63,7 +64,6 @@ class NullAdapter extends AbstractAdapter
         return false;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -77,7 +77,7 @@ class NullAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -133,7 +133,7 @@ class NullAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        return array('path' => $dirname, 'type' => 'dir');
+        return ['path' => $dirname, 'type' => 'dir'];
     }
 
     /**

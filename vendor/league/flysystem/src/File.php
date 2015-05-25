@@ -5,9 +5,9 @@ namespace League\Flysystem;
 class File extends Handler
 {
     /**
-     * Read the file
+     * Read the file.
      *
-     * @return  string  file contents
+     * @return string file contents
      */
     public function read()
     {
@@ -15,9 +15,9 @@ class File extends Handler
     }
 
     /**
-     * Read the file as a stream
+     * Read the file as a stream.
      *
-     * @return  resource  file stream
+     * @return resource file stream
      */
     public function readStream()
     {
@@ -25,10 +25,11 @@ class File extends Handler
     }
 
     /**
-     * Update the file contents
+     * Update the file contents.
      *
-     * @param   string   $content
-     * @return  boolean  success boolean
+     * @param string $content
+     *
+     * @return bool success boolean
      */
     public function update($content)
     {
@@ -36,10 +37,11 @@ class File extends Handler
     }
 
     /**
-     * Update the file contents with a stream
+     * Update the file contents with a stream.
      *
-     * @param   resource   $resource
-     * @return  boolean    success boolean
+     * @param resource $resource
+     *
+     * @return bool success boolean
      */
     public function updateStream($resource)
     {
@@ -47,9 +49,9 @@ class File extends Handler
     }
 
     /**
-     * Get the file's timestamp
+     * Get the file's timestamp.
      *
-     * @return  int  unix timestamp
+     * @return int unix timestamp
      */
     public function getTimestamp()
     {
@@ -57,9 +59,9 @@ class File extends Handler
     }
 
     /**
-     * Get the file's mimetype
+     * Get the file's mimetype.
      *
-     * @return  string  mimetime
+     * @return string mimetime
      */
     public function getMimetype()
     {
@@ -67,9 +69,29 @@ class File extends Handler
     }
 
     /**
-     * Get the file size
+     * Get the file's visibility.
      *
-     * @return  int  file size
+     * @return string visibility
+     */
+    public function getVisibility()
+    {
+        return $this->filesystem->getVisibility($this->path);
+    }
+
+    /**
+     * Get the file's metadata.
+     *
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->filesystem->getMetadata($this->path);
+    }
+
+    /**
+     * Get the file size.
+     *
+     * @return int file size
      */
     public function getSize()
     {
@@ -77,9 +99,9 @@ class File extends Handler
     }
 
     /**
-     * Delete the file
+     * Delete the file.
      *
-     * @return  boolean  success boolean
+     * @return bool success boolean
      */
     public function delete()
     {

@@ -34,7 +34,7 @@ class VerifyCsrfToken implements Middleware {
 	 * @param  \Closure  $next
 	 * @return mixed
 	 *
-	 * @throws TokenMismatchException
+	 * @throws \Illuminate\Session\TokenMismatchException
 	 */
 	public function handle($request, Closure $next)
 	{
@@ -72,7 +72,7 @@ class VerifyCsrfToken implements Middleware {
 	protected function addCookieToResponse($request, $response)
 	{
 		$response->headers->setCookie(
-			new Cookie('XSRF-TOKEN', $request->session()->token(), time() + 60 * 120)
+			new Cookie('XSRF-TOKEN', $request->session()->token(), time() + 60 * 120, '/', null, false, false)
 		);
 
 		return $response;

@@ -11,24 +11,11 @@ class SessionServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->setupDefaultDriver();
-
 		$this->registerSessionManager();
 
 		$this->registerSessionDriver();
-	}
 
-	/**
-	 * Setup the default session driver for the application.
-	 *
-	 * @return void
-	 */
-	protected function setupDefaultDriver()
-	{
-		if ($this->app->runningInConsole())
-		{
-			$this->app['config']['session.driver'] = 'array';
-		}
+		$this->app->singleton('Illuminate\Session\Middleware\StartSession');
 	}
 
 	/**

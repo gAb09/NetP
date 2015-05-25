@@ -1,7 +1,6 @@
 <?php namespace Illuminate\Foundation\Http;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Redirector;
@@ -18,14 +17,14 @@ class FormRequest extends Request implements ValidatesWhenResolved {
 	/**
 	 * The container instance.
 	 *
-	 * @var  Container  $container
+	 * @var \Illuminate\Container\Container
 	 */
 	protected $container;
 
 	/**
 	 * The redirector instance.
 	 *
-	 * @var Redirector
+	 * @var \Illuminate\Routing\Redirector
 	 */
 	protected $redirector;
 
@@ -51,6 +50,13 @@ class FormRequest extends Request implements ValidatesWhenResolved {
 	protected $redirectAction;
 
 	/**
+	 * The key to be used for the view error bag.
+	 *
+	 * @var string
+	 */
+	protected $errorBag = 'default';
+
+	/**
 	 * The input keys that should not be flashed on redirect.
 	 *
 	 * @var array
@@ -72,18 +78,8 @@ class FormRequest extends Request implements ValidatesWhenResolved {
 		}
 
 		return $factory->make(
-			$this->formatInput(), $this->container->call([$this, 'rules']), $this->messages()
+			$this->all(), $this->container->call([$this, 'rules']), $this->messages()
 		);
-	}
-
-	/**
-	 * Get the input that should be fed to the validator.
-	 *
-	 * @return array
-	 */
-	protected function formatInput()
-	{
-		return $this->all();
 	}
 
 	/**
@@ -132,14 +128,14 @@ class FormRequest extends Request implements ValidatesWhenResolved {
 	 */
 	public function response(array $errors)
 	{
-		if ($this->ajax())
+		if ($this->ajax() || $this->wantsJson())
 		{
 			return new JsonResponse($errors, 422);
 		}
 
 		return $this->redirector->to($this->getRedirectUrl())
                                         ->withInput($this->except($this->dontFlash))
-                                        ->withErrors($errors);
+                                        ->withErrors($errors, $this->errorBag);
 	}
 
 	/**
@@ -204,7 +200,7 @@ class FormRequest extends Request implements ValidatesWhenResolved {
 	/**
 	 * Set the container implementation.
 	 *
-	 * @param  Container  $container
+	 * @param  \Illuminate\Container\Container  $container
 	 * @return $this
 	 */
 	public function setContainer(Container $container)

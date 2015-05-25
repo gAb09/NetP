@@ -1,6 +1,6 @@
-<?php 
+<?php namespace App\Http\Controllers;
 
-class AdressableController extends BaseController {
+class AdressableController extends Controller {
 
   /**
    * Display a listing of the resource.
@@ -9,7 +9,7 @@ class AdressableController extends BaseController {
    */
   public function index()
   {
-    
+    return "à implémenter";
   }
 
   /**

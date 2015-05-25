@@ -3,11 +3,12 @@
 use Closure;
 use Swift_Mailer;
 use Swift_Message;
+use SuperClosure\Serializer;
 use Psr\Log\LoggerInterface;
-use Illuminate\Container\Container;
+use InvalidArgumentException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\SerializableClosure;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Contracts\Mail\MailQueue as MailQueueContract;
@@ -52,11 +53,11 @@ class Mailer implements MailerContract, MailQueueContract {
 	/**
 	 * The IoC container instance.
 	 *
-	 * @var \Illuminate\Container\Container
+	 * @var \Illuminate\Contracts\Container\Container
 	 */
 	protected $container;
 
-	/*
+	/**
 	 * The queue implementation.
 	 *
 	 * @var \Illuminate\Contracts\Queue\Queue
@@ -142,7 +143,7 @@ class Mailer implements MailerContract, MailQueueContract {
 	 * @param  string|array  $view
 	 * @param  array  $data
 	 * @param  \Closure|string  $callback
-	 * @return void
+	 * @return mixed
 	 */
 	public function send($view, array $data, $callback)
 	{
@@ -162,7 +163,7 @@ class Mailer implements MailerContract, MailQueueContract {
 
 		$message = $message->getSwiftMessage();
 
-		$this->sendSwiftMessage($message);
+		return $this->sendSwiftMessage($message);
 	}
 
 	/**
@@ -237,7 +238,7 @@ class Mailer implements MailerContract, MailQueueContract {
 	{
 		if ( ! $callback instanceof Closure) return $callback;
 
-		return serialize(new SerializableClosure($callback));
+		return (new Serializer)->serialize($callback);
 	}
 
 	/**
@@ -264,7 +265,7 @@ class Mailer implements MailerContract, MailQueueContract {
 	{
 		if (str_contains($data['callback'], 'SerializableClosure'))
 		{
-			return with(unserialize($data['callback']))->getClosure();
+			return unserialize($data['callback'])->getClosure();
 		}
 
 		return $data['callback'];
@@ -330,7 +331,7 @@ class Mailer implements MailerContract, MailQueueContract {
 			];
 		}
 
-		throw new \InvalidArgumentException("Invalid view.");
+		throw new InvalidArgumentException("Invalid view.");
 	}
 
 	/**
@@ -348,7 +349,7 @@ class Mailer implements MailerContract, MailQueueContract {
 
 		if ( ! $this->pretending)
 		{
-			$this->swift->send($message, $this->failedRecipients);
+			return $this->swift->send($message, $this->failedRecipients);
 		}
 		elseif (isset($this->logger))
 		{
@@ -386,10 +387,10 @@ class Mailer implements MailerContract, MailQueueContract {
 		}
 		elseif (is_string($callback))
 		{
-			return $this->container[$callback]->mail($message);
+			return $this->container->make($callback)->mail($message);
 		}
 
-		throw new \InvalidArgumentException("Callback is not valid.");
+		throw new InvalidArgumentException("Callback is not valid.");
 	}
 
 	/**
@@ -515,7 +516,7 @@ class Mailer implements MailerContract, MailQueueContract {
 	/**
 	 * Set the IoC container instance.
 	 *
-	 * @param  \Illuminate\Container\Container  $container
+	 * @param  \Illuminate\Contracts\Container\Container  $container
 	 * @return void
 	 */
 	public function setContainer(Container $container)

@@ -7,25 +7,27 @@ use LogicException;
 trait NotSupportingVisibilityTrait
 {
     /**
-     * Get the visibility of a file
+     * Get the visibility of a file.
      *
-     * @param   string  $path
-     * @return  array|false
+     * @param string $path
+     *
+     * @return array|false
      */
     public function getVisibility($path)
     {
-        throw new LogicException(get_class($this).' does not support visibility. Path: ' . $path);
+        throw new LogicException(get_class($this).' does not support visibility. Path: '.$path);
     }
 
     /**
-     * Set the visibility for a file
+     * Set the visibility for a file.
      *
-     * @param   string  $path
-     * @param   string  $visibility
-     * @throws  LogicException
+     * @param string $path
+     * @param string $visibility
+     *
+     * @throws LogicException
      */
     public function setVisibility($path, $visibility)
     {
-        throw new LogicException(get_class($this).' does not support visibility. Path: ' . $path . ', visibility: ' . $visibility);
+        throw new LogicException(get_class($this).' does not support visibility. Path: '.$path.', visibility: '.$visibility);
     }
 }

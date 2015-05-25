@@ -1,10 +1,12 @@
 <?php namespace App\Http\Controllers;
 use App\Gestion\PersonneG;
 use App\Gestion\AdresseG;
+use App\Gestion\QualiteG;
+use App\Gestion\StructureG;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-
-
+use Illuminate\Support\Facades\Input;
+use App\Models\Personne;
 class PersonneController extends Controller {
 
   /**
@@ -12,12 +14,11 @@ class PersonneController extends Controller {
    *
    * @return Response
    */
-  public function index(PersonneG $personnesG){
-    $personnes = $personnesG->getAll();
-    return view('Personnes.index')
-    ->with(compact('personnes'))
+  public function index(PersonneG $personnes){
+    return view('Shared.mosaic')
+    ->with('collection', $personnes->index())
     ->with('title', 'Les personnes')
-    ->with('titre_page', 'Personnes')
+    ->with('titre_page', 'Les personnes')
     ;
 }
 
@@ -41,16 +42,6 @@ class PersonneController extends Controller {
 
   }
 
-  /**
-   * Display the specified resource.
-   *
-   * @param  int  $id
-   * @return Response
-   */
-  public function show($id)
-  {
-
-  }
 
   /**
    * Show the form for editing the specified resource.
@@ -58,19 +49,26 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function edit($id, PersonneG $personnesG, AdresseG $adresseG){
-    $personne = $personnesG->edit($id);
-    $selectAdresses = $personnesG->selectAdresses();
-    $selectContacts = $personnesG->selectContacts();
-    $adressePartagedWith = $adresseG->adressePartaged($id, $personne->adresses->first()->id);
+  public function edit($id, PersonneG $personnes, AdresseG $adresseG, QualiteG $qualiteG, StructureG $structureG){
+    $personne = $personnes->edit($id);
+    $listAdresses = $personnes->listAdresses();
+    $listTelephones = $personnes->listTelephones();
+    $listMails = $personnes->listMails();
+    $adresseCommuneWith = $adresseG->adresseCommuneWith($id, $personne->adresses->first()->id);
+    $listQualites = $personnes->listQualites();
+    $listStructures = $personnes->listStructures();
 
+    // return dd($personne);
     return view('Personnes.edit')
     ->with('title', 'Modification d\'une fiche')
-    ->with('titre_page', 'Modification de la fiche de '.$personne->nomcomplet)
+    ->with('titre_page', 'Modification de la fiche de '.$personne->nom_complet)
     ->with(compact('personne'))
-    ->with(compact('selectAdresses'))
-    ->with(compact('selectContacts'))
-    ->with(compact('adressePartagedWith'))
+    ->with(compact('listAdresses'))
+    ->with(compact('listTelephones'))
+    ->with(compact('listMails'))
+    ->with(compact('adresseCommuneWith'))
+    ->with(compact('listQualites'))
+    ->with(compact('listStructures'))
     ;
 }
 
@@ -80,11 +78,11 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function update($id, PersonneG $PersonneG, Request $request, Redirector $redirect)
+  public function update($id, PersonneG $personne, Request $request, Redirector $redirect)
   {
-    // return 'update de la fiche '.$id;
+    $personne->update($id);
+// return var_dump('controleur');
 
-    $PersonneG->update($id, $request);
     return $redirect->action('PersonneController@index');
 }
 

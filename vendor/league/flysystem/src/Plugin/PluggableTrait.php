@@ -9,15 +9,16 @@ use LogicException;
 trait PluggableTrait
 {
     /**
-     * @var  array  $plugins
+     * @var array
      */
-    protected $plugins = array();
+    protected $plugins = [];
 
     /**
-     * Register a plugin
+     * Register a plugin.
      *
-     * @param   PluginInterface  $plugin
-     * @return  $this
+     * @param PluginInterface $plugin
+     *
+     * @return $this
      */
     public function addPlugin(PluginInterface $plugin)
     {
@@ -27,11 +28,13 @@ trait PluggableTrait
     }
 
     /**
-     * Register a plugin
+     * Register a plugin.
      *
-     * @param   string           $method
-     * @return  PluginInterface  $plugin
-     * @throws  LogicException
+     * @param string $method
+     *
+     * @throws LogicException
+     *
+     * @return PluginInterface $plugin
      */
     protected function findPlugin($method)
     {
@@ -40,7 +43,7 @@ trait PluggableTrait
         }
 
         if (! method_exists($this->plugins[$method], 'handle')) {
-            throw new LogicException(get_class($this->plugins[$method]) . ' does not have a handle method.');
+            throw new LogicException(get_class($this->plugins[$method]).' does not have a handle method.');
         }
 
         return $this->plugins[$method];
@@ -50,15 +53,16 @@ trait PluggableTrait
      * Invoke a plugin by method name.
      *
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return mixed
      */
     protected function invokePlugin($method, array $arguments, FilesystemInterface $filesystem)
     {
         $plugin = $this->findPlugin($method);
         $plugin->setFilesystem($filesystem);
-        $callback = array($plugin, 'handle');
+        $callback = [$plugin, 'handle'];
 
         return call_user_func_array($callback, $arguments);
     }
-} 
+}

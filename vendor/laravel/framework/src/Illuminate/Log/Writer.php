@@ -1,6 +1,8 @@
 <?php namespace Illuminate\Log;
 
 use Closure;
+use RuntimeException;
+use InvalidArgumentException;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger as MonologLogger;
@@ -161,6 +163,7 @@ class Writer implements LogContract, PsrLoggerInterface {
 	/**
 	 * Log a message to the logs.
 	 *
+	 * @param  string  $level
 	 * @param  string  $message
 	 * @param  array  $context
 	 * @return void
@@ -238,7 +241,7 @@ class Writer implements LogContract, PsrLoggerInterface {
 	 */
 	public function useSyslog($name = 'laravel', $level = 'debug')
 	{
-		return $this->monolog->pushHandler(new SyslogHandler('laravel', LOG_USER, $level));
+		return $this->monolog->pushHandler(new SyslogHandler($name, LOG_USER, $level));
 	}
 
 	/**
@@ -270,7 +273,7 @@ class Writer implements LogContract, PsrLoggerInterface {
 	{
 		if ( ! isset($this->dispatcher))
 		{
-			throw new \RuntimeException("Events dispatcher has not been set.");
+			throw new RuntimeException("Events dispatcher has not been set.");
 		}
 
 		$this->dispatcher->listen('illuminate.log', $callback);
@@ -334,7 +337,7 @@ class Writer implements LogContract, PsrLoggerInterface {
 			return $this->levels[$level];
 		}
 
-		throw new \InvalidArgumentException("Invalid log level.");
+		throw new InvalidArgumentException("Invalid log level.");
 	}
 
 	/**
@@ -354,7 +357,7 @@ class Writer implements LogContract, PsrLoggerInterface {
 	 */
 	protected function getDefaultFormatter()
 	{
-		return new LineFormatter(null, null, true);
+		return new LineFormatter(null, null, true, true);
 	}
 
 	/**

@@ -1,56 +1,46 @@
-@extends('layouts.app')
+<html>
+	<head>
+		<link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
 
-@section('content')
-<div id="welcome">
-    <div class="jumbotron">
-        <div class="container">
-            <h1 class="jumbotron__header">Prochaine version du site Nature & Progrès Ariège.</h1>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				color: #B0BEC5;
+				display: table;
+				font-weight: 100;
+				font-family: 'Lato';
+			}
 
-            <p class="jumbotron__body">
-                Nature & Progrès, la bio associative et solidaire.
-            </p>
-        </div>
-    </div>
+			.container {
+				text-align: center;
+				display: table-cell;
+				vertical-align: middle;
+			}
 
-    <div class="container">
-        <ol class="steps">
-            <li class="steps__item">
-                <div class="body">
-                    <h2>Les adhérents</h2>
+			.content {
+				text-align: center;
+				display: inline-block;
+			}
 
-                    <p>
-                        Retrouvez nos meilleurs producteurs et nos consommateurs les plus affutés !.
-                    </p>
-                    <ul>
-                        <li><a href="">Les producteurs</a></li>
-                        <li><a href="personne">Les adhérents</a></li>
-                    </ul>
+			.title {
+				font-size: 96px;
+				margin-bottom: 40px;
+			}
 
-                </div>
-            </li>
-
-            <li class="steps__item">
-                <div class="body">
-                    <h2>Consultez l’agenda</h2>
-
-                    <p>
-                        Prêt à venir vous informer ou mettre la main à la pâte ?
-                    </p>
-
-                    <ul>
-                        <li><a href="adresse">Les manifestations</a></li>
-                        <li><a href="">Les visites</a></li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="steps__item">
-                <div class="body">
-                    <h2>Adhérent, vous souhaitez entrez chez vous ?</h2>
-                        <a href="auth/login">Sésame, ouvres toi !!!</a>
-                </div>
-            </li>
-        </ol>
-    </div>
-</div>
-@stop
+			.quote {
+				font-size: 24px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="content">
+				<div class="title">Laravel 5</div>
+				<div class="quote">{{ Inspiring::quote() }}</div>
+			</div>
+		</div>
+	</body>
+</html>

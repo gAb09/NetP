@@ -6,7 +6,6 @@
 
 
 @section('topcontent1')
-<h1 class="titrepage">Modification de la fiche de {!! $adresse->id !!}</h1>
 @stop
 
 
@@ -16,17 +15,29 @@
 @section('contenu')
 <hr />
 
-{!! Form::model($adresse, ['method' => 'PUT', 'action' => ['AdresseController@update', $adresse->id]]) !!}
+<ul>
+	<li>
+		{!! Form::label('ad1', 'Ad1:') !!}
+		{!! Form::text('ad1') !!}
+	</li>
+	<li>
+		{!! Form::label('ad2', 'Ad2:') !!}
+		{!! Form::text('ad2') !!}
+	</li>
+	<li>
+		{!! Form::label('cp', 'Cp:') !!}
+		{!! Form::text('cp') !!}
+	</li>
+	<li>
+		{!! Form::label('ville', 'Ville:') !!}
+		{!! Form::text('ville')!!}
+	</li>
+	<li style="width:50%">
+		{!! Form::label('itineraire', 'Itinéraire', array ('class' => '', 'style' => '')) !!}
+		{!! Form::textarea('itineraire', $adresse->itineraire, array ('class' => '', 'style' => '')) !!}
+	</li>
+</ul>
 
-{!! Form::label('itineraire', 'Itinéraire', array ('class' => '', 'style' => '')) !!}
-{!! Form::textarea('itineraire', $adresse->itineraire, array ('class' => '', 'style' => '')) !!}
-
-<script>
-CKEDITOR.replace( 'itineraire', {
-	language: 'en',
-	uiColor: '#FFFAAA',
-});
-</script>
 
 {!! HTML::linkAction('AdresseController@index', 'Retour à la liste', null, array('class' => 'btn btn-info btn-zapette iconesmall list')) !!}
 
@@ -39,3 +50,13 @@ CKEDITOR.replace( 'itineraire', {
 
 @stop
 
+
+@section('scripts')
+@parent
+<script>
+CKEDITOR.replace( 'itineraire', {
+	language: 'en',
+	uiColor: '#FFFAAA',
+});
+</script>
+@stop

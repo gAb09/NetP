@@ -7,13 +7,14 @@ use League\Flysystem\Config;
 trait StreamedWritingTrait
 {
     /**
-     * Stream fallback delegator
+     * Stream fallback delegator.
      *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   Config    $config
-     * @param   string    $fallback
-     * @return  mixed     fallback result
+     * @param string   $path
+     * @param resource $resource
+     * @param Config   $config
+     * @param string   $fallback
+     *
+     * @return mixed fallback result
      */
     protected function stream($path, $resource, Config $config, $fallback)
     {
@@ -24,12 +25,13 @@ trait StreamedWritingTrait
     }
 
     /**
-     * Write using a stream
+     * Write using a stream.
      *
-     * @param   string  $path
-     * @param   resource  $resource
-     * @param   Config     $config
-     * @return  mixed     false or file metadata
+     * @param string   $path
+     * @param resource $resource
+     * @param Config   $config
+     *
+     * @return mixed false or file metadata
      */
     public function writeStream($path, $resource, Config $config)
     {
@@ -37,12 +39,13 @@ trait StreamedWritingTrait
     }
 
     /**
-     * Update a file using a stream
+     * Update a file using a stream.
      *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   Config     $config   Config object or visibility setting
-     * @return  mixed     false of file metadata
+     * @param string   $path
+     * @param resource $resource
+     * @param Config   $config   Config object or visibility setting
+     *
+     * @return mixed false of file metadata
      */
     public function updateStream($path, $resource, Config $config)
     {

@@ -14,10 +14,16 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li>
+						{!! HTML::linkRoute('adherent.index', 'Adhérents', null, null) !!}
+					</li>
+					<li>
 						{!! HTML::linkRoute('personne.index', 'Personnes', null, null) !!}
 					</li>
 					<li>
 						{!! HTML::linkRoute('adresse.index', 'Adresses', null, null) !!}
+					</li>
+					<li>
+						{!! HTML::linkRoute('structure.index', 'Structures', null, null) !!}
 					</li>
 				</ul>
 

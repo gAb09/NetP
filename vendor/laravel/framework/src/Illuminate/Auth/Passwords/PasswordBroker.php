@@ -1,7 +1,8 @@
 <?php namespace Illuminate\Auth\Passwords;
 
 use Closure;
-use Illuminate\Auth\UserProviderInterface;
+use UnexpectedValueException;
+use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Contracts\Auth\PasswordBroker as PasswordBrokerContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -18,7 +19,7 @@ class PasswordBroker implements PasswordBrokerContract {
 	/**
 	 * The user provider implementation.
 	 *
-	 * @var \Illuminate\Auth\UserProviderInterface
+	 * @var \Illuminate\Contracts\Auth\UserProvider
 	 */
 	protected $users;
 
@@ -47,13 +48,13 @@ class PasswordBroker implements PasswordBrokerContract {
 	 * Create a new password broker instance.
 	 *
 	 * @param  \Illuminate\Auth\Passwords\TokenRepositoryInterface  $tokens
-	 * @param  \Illuminate\Auth\UserProviderInterface  $users
+	 * @param  \Illuminate\Contracts\Auth\UserProvider  $users
 	 * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
 	 * @param  string  $emailView
 	 * @return void
 	 */
 	public function __construct(TokenRepositoryInterface $tokens,
-                                UserProviderInterface $users,
+                                UserProvider $users,
                                 MailerContract $mailer,
                                 $emailView)
 	{
@@ -66,8 +67,8 @@ class PasswordBroker implements PasswordBrokerContract {
 	/**
 	 * Send a password reset link to a user.
 	 *
-	 * @param  array     $credentials
-	 * @param  \Closure  $callback
+	 * @param  array  $credentials
+	 * @param  \Closure|null  $callback
 	 * @return string
 	 */
 	public function sendResetLink(array $credentials, Closure $callback = null)
@@ -96,8 +97,8 @@ class PasswordBroker implements PasswordBrokerContract {
 	 * Send the password reset link via e-mail.
 	 *
 	 * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
-	 * @param  string    $token
-	 * @param  \Closure  $callback
+	 * @param  string  $token
+	 * @param  \Closure|null  $callback
 	 * @return int
 	 */
 	public function emailResetLink(CanResetPasswordContract $user, $token, Closure $callback = null)
@@ -189,7 +190,7 @@ class PasswordBroker implements PasswordBrokerContract {
 	 * @param  array  $credentials
 	 * @return bool
 	 */
-	protected function validateNewPassword(array $credentials)
+	public function validateNewPassword(array $credentials)
 	{
 		list($password, $confirm) = [
 			$credentials['password'], $credentials['password_confirmation']
@@ -236,7 +237,7 @@ class PasswordBroker implements PasswordBrokerContract {
 
 		if ($user && ! $user instanceof CanResetPasswordContract)
 		{
-			throw new \UnexpectedValueException("User must implement CanResetPassword interface.");
+			throw new UnexpectedValueException("User must implement CanResetPassword interface.");
 		}
 
 		return $user;

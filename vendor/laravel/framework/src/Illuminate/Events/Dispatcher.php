@@ -1,5 +1,6 @@
 <?php namespace Illuminate\Events;
 
+use Exception;
 use ReflectionClass;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
@@ -188,13 +189,21 @@ class Dispatcher implements DispatcherContract {
 	/**
 	 * Fire an event and call the listeners.
 	 *
-	 * @param  string  $event
+	 * @param  string|object  $event
 	 * @param  mixed   $payload
 	 * @param  bool    $halt
 	 * @return array|null
 	 */
 	public function fire($event, $payload = array(), $halt = false)
 	{
+		// When the given "event" is actually an object we will assume it is an event
+		// object and use the class as the event name and this event itself as the
+		// payload to the handler, which makes object based events quite simple.
+		if (is_object($event))
+		{
+			list($payload, $event) = [[$event], get_class($event)];
+		}
+
 		$responses = array();
 
 		// If an array is not given to us as the payload, we will turn it into one so
@@ -364,10 +373,10 @@ class Dispatcher implements DispatcherContract {
 		try
 		{
 			return (new ReflectionClass($class))->implementsInterface(
-				'Illuminate\Contracts\Events\QueuedHandler'
+				'Illuminate\Contracts\Queue\ShouldBeQueued'
 			);
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
 			return false;
 		}
@@ -384,10 +393,47 @@ class Dispatcher implements DispatcherContract {
 	{
 		return function() use ($class, $method)
 		{
-			$this->resolveQueue()->push('Illuminate\Events\FireQueuedHandler', [
-				'class' => $class, 'method' => $method, 'data' => func_get_args(),
-			]);
+			$arguments = $this->cloneArgumentsForQueueing(func_get_args());
+
+			if (method_exists($class, 'queue'))
+			{
+				$this->callQueueMethodOnHandler($class, $method, $arguments);
+			}
+			else
+			{
+				$this->resolveQueue()->push('Illuminate\Events\CallQueuedHandler@call', [
+					'class' => $class, 'method' => $method, 'data' => serialize($arguments),
+				]);
+			}
 		};
+	}
+
+	/**
+	 * Clone the given arguments for queueing.
+	 *
+	 * @param  array  $arguments
+	 * @return array
+	 */
+	protected function cloneArgumentsForQueueing(array $arguments)
+	{
+		return array_map(function($a) { return is_object($a) ? clone $a : $a; }, $arguments);
+	}
+
+	/**
+	 * Call the queue method on the handler class.
+	 *
+	 * @param  string  $class
+	 * @param  string  $method
+	 * @param  array  $arguments
+	 * @return void
+	 */
+	protected function callQueueMethodOnHandler($class, $method, $arguments)
+	{
+		$handler = (new ReflectionClass($class))->newInstanceWithoutConstructor();
+
+		$handler->queue($this->resolveQueue(), 'Illuminate\Events\CallQueuedHandler@call', [
+			'class' => $class, 'method' => $method, 'data' => serialize($arguments),
+		]);
 	}
 
 	/**
