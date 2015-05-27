@@ -1,5 +1,9 @@
 <?php namespace App\Gestion;
-use App\Models\Contact;
+use App\Gestion\AdresseG as Adresse;
+use App\Gestion\QualiteG as Qualite;
+use App\Gestion\StructureG as Structure;
+use App\Models\Telephone;
+use App\Models\Mail;
 
 trait TraitG{
 
@@ -41,6 +45,16 @@ trait TraitG{
 	}
 
 
+	public function getAllSortedBy($sort, $model){
+		$collection  = $model::orderBy($sort)->get();
+
+		$collection->each(function($model) use ($collection)
+		{
+			$model = $this->completeModel($model);
+		});
+		return $collection;
+	}
+
 
 
 	public function isPrincipal($model, $media){
@@ -57,5 +71,7 @@ trait TraitG{
 		}
 		return $model;
 	}
+
+
 
 }

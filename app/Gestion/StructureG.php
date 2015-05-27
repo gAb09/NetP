@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Input;
 class StructureG {
 	use TraitG;
 
+
+	public function create(){
+		return new Structure;
+	}
+
+
+	public function edit($id){
+		$structure  = Structure::with(array('adresses', 'coordonnees'))->find($id);
+		$structure = $this->completeModel($structure); 
+
+		return $this->nomComplet($structure);
+	}
+
+
 	public function getAll(){
 		$collection  = Structure::with(array('adresses', 'telephones', 'telephonables', 'qualites'))->orderBy('rais_soc')->get();
 
@@ -25,7 +39,6 @@ class StructureG {
 	}
 
 
-
 	public function completeModel($model){
 		$model = $this->nomComplet($model);
 		$model = $this->nullVersIndefini($model);
@@ -39,44 +52,7 @@ class StructureG {
 	}
 
 
-	public function listQualites(){
-		$qualiteG = new QualiteG;
-		$qualites = $qualiteG->getAll();
-		$liste = array();
-		foreach ($qualites as $qualite) {
-			$liste[$qualite->id] = $qualite->libelle;
-		}
-		return $liste;
-	}
 
-	public function listAdresses(){
-		$adresseG = new AdresseG;
-		$adresses = $adresseG->getAllSortedBy('cp');
-		$liste = array();
-		foreach ($adresses as $adresse) {
-			$liste[$adresse->id] = $adresse->select_adress;
-		}
-		return $liste;
-	}
-
-	public function listCoordonnees(){
-		$coordonneeG = new CoordonneeG;
-		$coordonnees = $coordonneeG->getAll();
-		$liste = array();
-		foreach ($coordonnees as $coordonnee) {
-			$liste[$coordonnee->id] = $coordonnee->mail1.' - '.$coordonnee->tel1;
-		}
-		return $liste;
-	}
-
-
-	public function edit($id){
-		$structure  = Structure::with(array('adresses', 'coordonnees'))->find($id);
-		$structure = $this->completeModel($structure); 
-
-
-		return $this->nomComplet($structure);
-	}
 
 
 	public function find($id){
@@ -94,11 +70,25 @@ class StructureG {
 		$structure->adresses()->sync(array($input->get('adresse')));
 		$structure->coordonnees()->sync(array($input->get('coordonnees')));
 		$structure->qualites()->sync(array($input->get('qualite')));
-			$structure->nom = Input::get('nom');
+		$structure->nom = Input::get('nom');
 			// $structure->theme_id = Input::get('theme_id');
 			// $type = Input::get('livrable');
 			// $structure->livrable_type = $type;
 			// $structure->livrable_id = ($type == 'Lib\Editeurs\Editeur') ? Input::get('editeur_id') : Input::get('autoedite_id');
-			$structure->save();
+		$structure->save();
 	}
+
+	/* Liste des structures */
+	public function listForSelect(){
+		$structures = new Structure;
+		$structures = $this->getAllSortedBy('rais_soc', 'App\Models\Structure');
+		$liste = array();
+		foreach ($structures as $structure) {
+			$liste[$structure->id] = $structure->rais_soc;
+		}
+		return $liste;
+	}
+
+
+
 }

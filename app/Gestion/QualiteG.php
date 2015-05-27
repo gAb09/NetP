@@ -21,6 +21,18 @@ class QualiteG{
 		return $collection;
 	}
 
+
+	/* Liste des qualités */
+	public function listForSelect(){
+		$qualites = new Qualite;
+		$qualites = $this->getAll();
+		foreach ($qualites as $qualite) {
+			$liste[$qualite->id] = $qualite->libelle;
+		}
+		return $liste;
+	}
+
+
 }
 
 

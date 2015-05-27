@@ -3,6 +3,8 @@ use App\Gestion\PersonneG;
 use App\Gestion\AdresseG;
 use App\Gestion\QualiteG;
 use App\Gestion\StructureG;
+use App\Gestion\TelephoneG;
+use App\Gestion\MailG;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Input;
@@ -49,25 +51,33 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function edit($id, PersonneG $personnes, AdresseG $adresseG, QualiteG $qualiteG, StructureG $structureG){
+  public function edit(
+    $id, 
+    PersonneG $personnes, 
+    QualiteG $qualites, 
+    AdresseG $adresses, 
+    TelephoneG $telephones, 
+    MailG $mails, 
+    StructureG $structures
+    ){
     $personne = $personnes->edit($id);
-    $listAdresses = $personnes->listAdresses();
-    $listTelephones = $personnes->listTelephones();
-    $listMails = $personnes->listMails();
-    $adresseCommuneWith = $adresseG->adresseCommuneWith($id, $personne->adresses->first()->id);
-    $listQualites = $personnes->listQualites();
-    $listStructures = $personnes->listStructures();
+    $listQualites = $qualites->listForSelect();
+    $listAdresses = $adresses->listForSelect();
+    $adresseCommuneWith = $adresses->adresseCommuneWith($id, $personne->adresses->first()->id);
+    $listTelephones = $telephones->listForSelect();
+    $listMails = $mails->listForSelect();
+    $listStructures = $structures->listForSelect();
 
     // return dd($personne);
     return view('Personnes.edit')
     ->with('title', 'Modification d\'une fiche')
     ->with('titre_page', 'Modification de la fiche de '.$personne->nom_complet)
     ->with(compact('personne'))
+    ->with(compact('listQualites'))
     ->with(compact('listAdresses'))
+    ->with(compact('adresseCommuneWith'))
     ->with(compact('listTelephones'))
     ->with(compact('listMails'))
-    ->with(compact('adresseCommuneWith'))
-    ->with(compact('listQualites'))
     ->with(compact('listStructures'))
     ;
 }

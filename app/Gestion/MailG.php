@@ -21,14 +21,16 @@ class MailG{
 		return $collection;
 	}
 
-	public function getAllSortedBy($sort){
-		$collection  = Mail::orderBy($sort)->get();
 
-		$collection->each(function($model) use ($collection)
-		{
-			$model = $this->completeModel($model);
-		});
-		return $collection;
+	/* Liste des mails */
+	public function listForSelect(){
+		$mails = new Mail;
+		$mails = $this->getAllSortedBy('valeur', 'App\Models\Mail');
+		$liste = array();
+		foreach ($mails as $mail) {
+			$liste[$mail->id] = $mail->valeur;
+		}
+		return $liste;
 	}
 
 

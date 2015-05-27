@@ -21,14 +21,15 @@ class TelephoneG{
 		return $collection;
 	}
 
-	public function getAllSortedBy($sort){
-		$collection  = Telephone::orderBy($sort)->get();
-
-		$collection->each(function($model) use ($collection)
-		{
-			$model = $this->completeModel($model);
-		});
-		return $collection;
+	/* Liste des telephones */
+	public function listForSelect(){
+		$telephones = new Telephone;
+		$telephones = $this->getAllSortedBy('valeur', 'App\Models\Telephone');
+		$liste = array();
+		foreach ($telephones as $telephone) {
+			$liste[$telephone->id] = $telephone->valeur;
+		}
+		return $liste;
 	}
 
 

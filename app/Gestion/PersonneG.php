@@ -74,64 +74,6 @@ class PersonneG {
 
 
 
-	/* - - - - - - - - - - - - - - - - - - - - - - - - - 
-	Composition des listes pour les input select 
-	- - - - - - - - - - - - - - - - - - - - - - - - - */
-
-	/* Liste des qualités */
-	public function listQualites(){
-		$qualites = new Qualite;
-		$qualites = $qualites->getAll();
-		foreach ($qualites as $qualite) {
-			$liste[$qualite->id] = $qualite->libelle;
-		}
-		return $liste;
-	}
-
-	/* Liste des adresses */
-	public function listAdresses(){
-		$adresses = new Adresse;
-		$adresses = $adresses->getAllSortedBy('cp');
-		$liste[0] = 'Inconnue';
-		foreach ($adresses as $adresse) {
-			$liste[$adresse->id] = $adresse->select_adress;
-		}
-		return $liste;
-	}
-
-	/* Liste des telephones */
-	public function listTelephones(){
-		$telephones = new Telephone;
-		$telephones = $telephones->getAllSortedBy('valeur');
-		$liste = array();
-		foreach ($telephones as $telephone) {
-			$liste[$telephone->id] = $telephone->valeur;
-		}
-		return $liste;
-	}
-
-	/* Liste des mails */
-	public function listMails(){
-		$mails = new Mail;
-		$mails = $mails->getAllSortedBy('valeur');
-		$liste = array();
-		foreach ($mails as $mail) {
-			$liste[$mail->id] = $mail->valeur;
-		}
-		return $liste;
-	}
-
-	/* Liste des structures */
-	public function listStructures(){
-		$structures = new Structure;
-		$structures = $structures->getAll();
-		$liste = array();
-		foreach ($structures as $structure) {
-			$liste[$structure->id] = $structure->rais_soc;
-		}
-		return $liste;
-	}
-
 
 
 

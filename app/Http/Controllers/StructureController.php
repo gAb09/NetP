@@ -25,10 +25,27 @@ class StructureController extends Controller {
    *
    * @return Response
    */
-  public function create()
+  public function create(StructureG $structures, AdresseG $adresses, QualiteG $qualites)
   {
-    
+    $structure = $structures->create();
+
+    $listAdresses = $adresses->listForSelect();
+    // $listTelephones = $personnes->listTelephones();
+    // $listMails = $personnes->listMails();
+    $adresseCommuneWith = array();
+    $listQualites = $qualites->listForSelect();
+    // $listStructures = $personnes->listStructures();
+// dd($listQualites);
+    return \View::make('Structures.create')
+    ->with(compact('structure'))
+    ->with(compact('listAdresses'))
+    ->with(compact('adresseCommuneWith'))
+    ->with(compact('listQualites'))
+    ->with('title', 'Structure - Création')
+    ->with('titre_page', 'Création d’une structure')
+    ;
   }
+
 
   /**
    * Store a newly created resource in storage.
@@ -37,7 +54,7 @@ class StructureController extends Controller {
    */
   public function store()
   {
-    
+
   }
 
   /**
@@ -48,7 +65,7 @@ class StructureController extends Controller {
    */
   public function show($id)
   {
-    
+
   }
 
   /**
@@ -87,7 +104,7 @@ class StructureController extends Controller {
    */
   public function update($id)
   {
-    
+
   }
 
   /**
@@ -98,7 +115,7 @@ class StructureController extends Controller {
    */
   public function destroy($id)
   {
-    
+
   }
   
 }

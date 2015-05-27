@@ -1,11 +1,8 @@
 <!-- Nom - Prénom-->
 <fieldset class="fiche">
 	<legend>Identité</legend>
-	{!! Form::label('prenom', 'Prenom', array ('class' => '')) !!}
-	{!! Form::text('prenom', null, array ('class' => '')) !!}
-
-	{!! Form::label('nom', 'Nom', array ('class' => '')) !!}
-	{!! Form::text('nom', null, array ('class' => '')) !!}
+	{!! Form::label('rais_soc', 'Nom', array ('class' => '')) !!}
+	{!! Form::text('rais_soc', null, array ('class' => '')) !!}
 
 	{!! Form::label('pseudo', 'Pseudo', array ('class' => '')) !!}
 	{!! Form::text('pseudo', null, array ('class' => '')) !!}
@@ -13,10 +10,11 @@
 
 
 <!-- Qualité-->
+<?php $valeur = (isset($structure->qualites->first()->id)) ? : 0 ?>
 <fieldset class="fiche">
 	<legend>Qualité</legend>
 	{!! Form::label('qualite', ' ', array ('class' => '')) !!}
-	{!! Form::select('qualite', $listQualites, $structure->qualites->first()->id,  array ('class' => '')) !!}
+	{!! Form::select('qualite', $listQualites, $valeur,  array ('class' => '')) !!}
 </fieldset>
 
 
@@ -25,7 +23,7 @@
 	<legend>Adresse</legend>
 
 	{!! Form::label('adresse', ' ', array ('class' => '')) !!}
-	{!! Form::select('adresse', $listAdresses, $structure->adresses->first()->id,  array ('class' => '')) !!}
+	{!! Form::select('adresse', $listAdresses, $valeur,  array ('class' => '')) !!}
 	@if(count($adresseCommuneWith))
 	<h4>Cette adresse est partagée avec :</h4>
 	<ul>
@@ -35,12 +33,5 @@
 	</ul>
 	@endif
 
-</fieldset>
-
-<!-- Contact-->
-<fieldset class="fiche">
-	<legend>Coordonnées</legend>
-	{!! Form::label('coordonnees', ' ', array ('class' => '')) !!}
-	{!! Form::select('coordonnees', $listCoordonnees, $structure->coordonnees->first()->id,  array ('class' => '')) !!}
 </fieldset>
 

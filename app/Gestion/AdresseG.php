@@ -2,19 +2,10 @@
 use App\Models\Adresse;
 
 class AdresseG{
+	use TraitG;
 
 	public function getAll(){
 		$collection  = Adresse::all();
-
-		$collection->each(function($model) use ($collection)
-		{
-			$model = $this->completeModel($model);
-		});
-		return $collection;
-	}
-
-	public function getAllSortedBy($sort){
-		$collection  = Adresse::orderBy($sort)->get();
 
 		$collection->each(function($model) use ($collection)
 		{
@@ -96,5 +87,18 @@ class AdresseG{
 		// var_dump($adresses[0]->toArray());
 		return $adresses[0];
 	}
+
+
+	/* Liste des adresses */
+	public function listForSelect(){
+		$adresses = new Adresse;
+		$adresses = $this->getAllSortedBy('cp', 'App\Models\Adresse');
+		$liste[0] = 'Inconnue';
+		foreach ($adresses as $adresse) {
+			$liste[$adresse->id] = $adresse->select_adress;
+		}
+		return $liste;
+	}
+
 
 }
