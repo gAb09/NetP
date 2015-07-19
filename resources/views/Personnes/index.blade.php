@@ -8,12 +8,7 @@
 			@foreach ($personne->qualites as $qualite)
 				<?php $qualite_classe = ""; ?>
 
-				@if($qualite->appel_structure)
-					<?php $structure_lied = ($qualite->structure_lied) ? : "non défini"; ?>
-					<?php $qualite_classe = ($qualite->structure_lied) ? "" : "indefini"; ?>
-				@endif
-
-				<p class="encadred2{!! $qualite_classe !!}">
+				<p class="encadred2 {!! $qualite_classe !!}">
 					@if($qualite->rang == 1)
 						<span class="qualite">
 					@else
@@ -25,10 +20,6 @@
 					en nom propre
 				@endif
 
-				@if($qualite->id == 3)
-					: <br />
-					{!! $structure_lied !!}
-				@endif
 				</span>
 				</p>
 			@endforeach
@@ -38,11 +29,36 @@
 			</p>
 		@endif
 
+
 		<!-- Nom -->
 		<h3 class="nom {!! $personne->nom_complet_class !!}">
 			{!! $personne->nom_complet !!}
 			{!! $personne->nom_complet_class !!}
 		</h3>
+
+
+		<!-- Structure-->
+		@if(!$personne->structures->isEmpty() and !$personne->structures[0]->id == 0)
+
+			@foreach ($personne->structures as $structure)
+				<?php $structure_classe = ""; ?>
+
+				<p class="encadred2 {!! $structure_classe !!}">
+					@if($structure->rang == 1)
+						<span class="structure">
+					@else
+						<span class="structure">
+					@endif
+				{!! $structure->rais_soc !!}
+
+				</span>
+				</p>
+			@endforeach
+		@else
+			<p class="indefini">
+			Pas de lien avec une structure
+			</p>
+		@endif
 
 
 

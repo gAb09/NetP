@@ -1,10 +1,11 @@
 <?php namespace App\Gestion;
 use App\Models\Personne;
+use App\Models\Structure;
 use App\Gestion\TelephoneG as Telephone;
 use App\Gestion\MailG as Mail;
 use App\Gestion\AdresseG as Adresse;
 use App\Gestion\QualiteG as Qualite;
-use App\Gestion\StructureG as Structure;
+use App\Gestion\StructureG;
 use illuminate\Database\Query\Builder;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Connectors;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Input;
 class PersonneG {
 	use TraitG;
 
-	public function index(){
+	public function getAll(){
 		$collection  = Personne::complet()->orderBy('nom')->get();
 
 		$collection->each(function($model)
@@ -27,12 +28,14 @@ class PersonneG {
 
 
 	public function completeModel($model){
-		$model->getNomCompletAttributes();
+		// return dd($model);
 		$model = $this->nullVersIndefini($model);
-		$model = $this->StructureLied($model);
+		// $model = $this->StructureLied($model);
+		// $model = $this->classeParRang($model, 'adresses');
 		$model = $this->classeParRang($model, 'telephones');
 		$model = $this->classeParRang($model, 'mails');
 		$model = $this->classeParRang($model, 'qualites');
+		// $model = $this->classeParRang($model, 'structures');
 
 		return $model;
 	}
@@ -43,11 +46,13 @@ class PersonneG {
 		{
 			if ($qualite->appel_structure == 1)  /* Si cette "qualité" appelle une structure on recherche cette dernière. */
 			{
-				$structure_lied = $this->searchStructureLied($model, $qualite->pivot->id);
-				if ($structure_lied)
+				$structure_lied = $this->searchStructureLied($qualite);
+
+				if (is_object($structure_lied))
 				{
 					$qualite->structure_lied = $structure_lied;
 				}else{
+
 					$qualite->structure_lied = false;
 				}
 			}
@@ -58,18 +63,13 @@ class PersonneG {
 
 
 
-	public function searchStructureLied($model, $id){
+	public function searchStructureLied($qualite){
 
-		if ($model->structures->count())/* On vérifie qu'il y a bien au moins une structure liée */
-		{
-			foreach ($model->structures as $structure) /* Pour chaque structure liée */
-			{
-				if ($structure->pivot->relation == $id)  /* On cherche la correspondance avec l'id de la relation "qualifiables" */
-				{
-					return $structure->rais_soc;
-				}
-			}
-		}
+		// if ($qualite->pivot->structure_id)/* On vérifie qu'il y a bien une structure liée */
+		// {
+
+		return Structure::find($qualite->pivot->structure_id);
+		// }
 	}
 
 
@@ -93,13 +93,16 @@ class PersonneG {
 	public function update($id){
 
 		$personne = Personne::complet()->find($id); 
-		// var_dump($personne->toArray());
-		// dd(Input::all());
-
 
 		$personne->prenom =  Input::get('prenom');
 		$personne->nom = Input::get('nom');
 		// $personne->pseudo =  Input::get('pseudo');
+		
+		// var_dump($personne->relations->toArray());
+		// dd($personne->qualites->toArray());
+		var_dump(Input::all());
+		var_dump($personne->qualites->toArray());
+
 		\DB::transaction(function() use($personne)
 		{  
 			if (Input::get('adresse')) {
@@ -107,8 +110,15 @@ class PersonneG {
 			}
 
 			if (Input::get('qualite')) {
-				$personne->qualites()->sync(Input::get('qualite'));
+				var_dump($personne->qualites()->sync(Input::get('qualite')));
 			}
+
+
+			var_dump($personne->qualites()->sync(Input::get('relation')));
+			foreach (Input::get('relation') as $key => $value) {
+
+			}
+
 
 			if (Input::get('telephone')) {
 				$personne->telephones()->sync(Input::get('telephone'));
@@ -118,9 +128,8 @@ class PersonneG {
 				$personne->mails()->sync(Input::get('mail'));
 			}
 
-			if (Input::get('structure')) {
-				$personne->structures()->sync(Input::get('structure'));
-			}
+			var_dump($personne->qualites->toArray());
+			dd('stop save');
 
 			$personne->save();
 			$personne->push();
@@ -130,4 +139,15 @@ class PersonneG {
 		// dd($personne->toArray());
 
 	}
+
+	public function listForSelect($sort = 'nom'){
+		$personnes = $this->getAllSortedBy($sort, 'App\Models\Personne');
+		$liste = array();
+		foreach ($personnes as $personne) {
+			$liste[$personne->id] = $personne->nom_complet;
+		}
+		return $liste;
+	}
+
+
 }

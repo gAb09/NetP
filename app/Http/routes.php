@@ -25,29 +25,18 @@ Route::get('/imap/free/{util}', 'Imap\ImapController@free');
 Route::get('/imap', 'Imap\ImapController@index');
 
 Route::resource('adresse', 'AdresseController');
-Route::resource('coordonnees', 'AdresseController');
 Route::resource('adherent', 'AdherentController');
 Route::resource('personne', 'PersonneController');
 Route::resource('structure', 'StructureController');
-Route::resource('adressable', 'AdressableController');
+
+Route::get('adhesion/create/{type}', ['as' => 'adhesion.create', 'uses' => 'AdhesionController@create']);
+Route::resource('adhesion', 'AdhesionController', ['except' => array('create')]);
 
 
 Route::get('ck', function(){
 	return View::make('ck');
 });
 
-Route::get('tel', function(){
-	$test = Telephone::with('personnes', 'telephonables')->get();
-	// return var_dump($test[0]);
-	return var_dump($test->toArray());
-	return var_dump($test);
-});
-
-Route::get('pers', function(){
-	$test = Personne::with('telephones', 'telephonables')->get();
-	return var_dump($test->toArray());
-	return var_dump($test);
-});
 
 Route::get('ad', function(){
 	$test = Personne::with('adresses')->find(10);

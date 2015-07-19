@@ -46,8 +46,7 @@ class AdherentG {
 
 
 	public function completeModel($model){
-		$model->getNomCompletAttributes();
-		$model = $this->nullVersIndefini($model);
+		// $model = $this->nullVersIndefini($model);
 		// $model = $this->LiedAdhesionPro($model);
 
 		return $model;

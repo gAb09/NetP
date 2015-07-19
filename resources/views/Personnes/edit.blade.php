@@ -7,7 +7,7 @@
 
 
 @section('topcontent1')
-<h1 class="titrepage">Modification de la fiche de {!! $personne->nom_complet !!} ({!! $personne->id !!})</h1>
+<h1 class="titrepage">Modification de la fiche de “{!! $personne->nom_complet !!}” ({!! $personne->id !!})</h1>
 @stop
 
 

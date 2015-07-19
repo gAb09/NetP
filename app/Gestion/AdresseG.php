@@ -46,19 +46,6 @@ class AdresseG{
 	}
 
 
-	public function nullVersIndefini($model){
-		foreach ($model['attributes'] as $attribute => $value)
-		{
-			if ($attribute != "deleted_at" and is_null($value))
-			{
-				$model[$attribute] = "Indéfini";
-				$model->{$attribute."_class"} = "indefini";
-			}
-		}
-		return $model;
-	}
-
-
 	public function FullAdress($model){
 		$model->getFullAdressAttributes();
 		return $model;
@@ -81,11 +68,15 @@ class AdresseG{
 		}))
 		->where('id', $adresse_id)
 		->get()
-		// ->first()
-		// ->structure
 		;
-		// var_dump($adresses[0]->toArray());
+
+
+		if (empty($adresses[0]->personne[0]) and empty($adresses[0]->structure[0])) {
+			return false;
+		}
+
 		return $adresses[0];
+
 	}
 
 

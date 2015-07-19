@@ -1,6 +1,9 @@
 <?php namespace App\Http\Controllers;
 use App\Gestion\StructureG;
+use App\Gestion\PersonneG;
 use App\Gestion\AdresseG;
+use App\Gestion\TelephoneG;
+use App\Gestion\MailG;
 use App\Gestion\QualiteG;
 
 class StructureController extends Controller {
@@ -10,11 +13,9 @@ class StructureController extends Controller {
    *
    * @return Response
    */
-  public function index(StructureG $structuresG)
-  {
-    $structures = $structuresG->getAll();
-    return view('Structures.index')
-    ->with(compact('structures'))
+  public function index(StructureG $structures){
+    return view('Shared.mosaic')
+    ->with('collection', $structures->getAll())
     ->with('title', 'Les structures')
     ->with('titre_page', 'Structures')
     ;
@@ -25,22 +26,23 @@ class StructureController extends Controller {
    *
    * @return Response
    */
-  public function create(StructureG $structures, AdresseG $adresses, QualiteG $qualites)
+  public function create(StructureG $structures, QualiteG $qualites, AdresseG $adresses, TelephoneG $telephones, MailG $mails)
   {
     $structure = $structures->create();
 
-    $listAdresses = $adresses->listForSelect();
-    // $listTelephones = $personnes->listTelephones();
-    // $listMails = $personnes->listMails();
-    $adresseCommuneWith = array();
     $listQualites = $qualites->listForSelect();
-    // $listStructures = $personnes->listStructures();
-// dd($listQualites);
+    $listAdresses = $adresses->listForSelect();
+    $adresseCommuneWith = array();
+    $listTelephones = $telephones->listForSelect();
+    $listMails = $mails->listForSelect();
+
     return \View::make('Structures.create')
     ->with(compact('structure'))
+    ->with(compact('listQualites'))
     ->with(compact('listAdresses'))
     ->with(compact('adresseCommuneWith'))
-    ->with(compact('listQualites'))
+    ->with(compact('listTelephones'))
+    ->with(compact('listMails'))
     ->with('title', 'Structure - Création')
     ->with('titre_page', 'Création d’une structure')
     ;
@@ -52,10 +54,11 @@ class StructureController extends Controller {
    *
    * @return Response
    */
-  public function store()
+  public function store(StructureG $structures)
   {
-
-  }
+    $structures->store();
+    return \View::make('Structures.index');
+ }
 
   /**
    * Display the specified resource.
@@ -68,30 +71,45 @@ class StructureController extends Controller {
 
   }
 
+
+
+    // return dd($personne);
+
+
   /**
    * Show the form for editing the specified resource.
    *
    * @param  int  $id
    * @return Response
    */
-  public function edit($id, StructureG $structuresG, AdresseG $adresseG, QualiteG $qualiteG){
-    dd("édition de la structure id = $id");
-    $structure = $structuresG->edit($id);
-    $listAdresses = $structuresG->listAdresses();
-    $listCoordonnees = $structuresG->listCoordonnees();
-    $adresseCommuneWith = $adresseG->adresseCommuneWith($id, $structure->adresses->first()->id);
-    $listQualites = $structuresG->listQualites();
+  public function edit(
+    $id, 
+    StructureG $structures, 
+    QualiteG $qualites, 
+    AdresseG $adresses, 
+    TelephoneG $telephones, 
+    MailG $mails,
+    PersonneG $personnes
+    ){
+    $structure = $structures->edit($id);
+    $listAdresses = $adresses->listForSelect();
+    $listQualites = $qualites->listForSelect();
+    $adresseCommuneWith = $adresses->adresseCommuneWith($id, $structure->adresses->first()->id);
+    $listTelephones = $telephones->listForSelect();
+    $listMails = $mails->listForSelect();
 
-    // return dd($structure);
+    return var_dump(count($adresseCommuneWith));
+    return dd($adresseCommuneWith);
 
     return view('Structures.edit')
     ->with('title', 'Modification d\'une fiche')
     ->with('titre_page', 'Modification de la fiche de '.$structure->nom_complet)
     ->with(compact('structure'))
-    ->with(compact('listAdresses'))
-    ->with(compact('listCoordonnees'))
-    ->with(compact('adresseCommuneWith'))
     ->with(compact('listQualites'))
+    ->with(compact('listAdresses'))
+    ->with(compact('adresseCommuneWith'))
+    ->with(compact('listTelephones'))
+    ->with(compact('listMails'))
     ;
   }
 
@@ -102,9 +120,11 @@ class StructureController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update($id, StructureG $structure)
   {
+    $structure->update($id);
 
+    return \Redirect::action('StructureController@index');
   }
 
   /**

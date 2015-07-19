@@ -17,6 +17,7 @@
 	<!-- Bootstrap CSS -->
 	<link href="/css/app.css" rel="stylesheet">
 	<link href="/css/style.css" rel="stylesheet">
+	<link href="/css/adhesions.css" rel="stylesheet">
 	<link href="/css/vendor/font-awesome.css" rel="stylesheet">
 
 	<!-- Web Fonts -->
@@ -67,6 +68,7 @@
 		<!-- - - - - - - - - - - - - - - -   ZAPETTE   - - - - - - - - - - - - - - -->
 
 		<div class="zapette">
+			<hr />
 			@section('zapette')
 			@show
 		</div>
@@ -82,6 +84,10 @@
 		<!-- - - - - - - - - - - - - - - -   SCRIPTS   - - - - - - - - - - - - - - -->
 
 		@section('scripts')
+	<script src="/js/vendor/jquery.js"></script>
+	<script src="/js/vendor/bootstrap.js"></script>
+	<script src="/js/vendor/collapse.js"></script>
+	<script src="/js/np.js"></script>
 
 		@show
 

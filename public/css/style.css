@@ -100,24 +100,18 @@
 	color: #FFF;
 }
 
-form.edit {
+form.flow {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: flex-start;
 	align-items: stretch;
 }
 
-form.edit fieldset{
+form.flow fieldset{
 	margin: 8px;
 	background-color: #CCC;
 }
 
-fieldset label {
-	display:block;
-	float: left;
-	width: 100px;
-	text-align: right;
-}
 
 .encadred .note {
 	/*background-color: #FFF;*/
@@ -129,4 +123,26 @@ fieldset label {
 .encadred:hover .note {
 	position: absolute;
 	/*display:inline;*/
+}
+
+.radio_correctif input[type="radio"]{
+	margin-left: -11px;
+	margin-top: 3px;
+}
+
+.radio_correctif label{
+	margin-left: -11px;
+}
+
+.checkbox_correctif input[type="checkbox"]{
+	margin-left: 0px;
+	margin-top: 1px;
+}
+
+.checkbox_correctif label{
+	margin-left: 0px;
+}
+
+table tr:hover{
+    box-shadow: 0px 0px 16px #aaa;
 }

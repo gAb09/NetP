@@ -11,47 +11,60 @@ class StructureG {
 	use TraitG;
 
 
-	public function create(){
-		return new Structure;
-	}
-
-
-	public function edit($id){
-		$structure  = Structure::with(array('adresses', 'coordonnees'))->find($id);
-		$structure = $this->completeModel($structure); 
-
-		return $this->nomComplet($structure);
-	}
-
-
 	public function getAll(){
-		$collection  = Structure::with(array('adresses', 'telephones', 'telephonables', 'qualites'))->orderBy('rais_soc')->get();
+		$collection  = Structure::complet()->orderBy('rais_soc')->get();
 
-// dd($collection);
+// var_dump($collection->toArray());
 
 		$collection->each(function($model) use ($collection)
 		{
 
 			$model = $this->completeModel($model); 
 		});
+// dd($collection->toArray());
 
 		return $collection;
 	}
 
 
+	public function create(){
+		$structure = new Structure;
+		$structure->rais_soc = 0;
+		$structure->test = 0;
+		$structure->select_option = array('adresse' => 0, 'telephone' => 0, 'mail' => 0);
+
+		return $structure;
+	}
+
+	public function store()
+	{
+        // dd(Input::all());
+		$structure = new Structure;
+		$structure->rais_soc = Input::get('rais_soc');
+
+		\DB::transaction(function() use($structure)
+		{   
+			$structure->save();
+			$structure->qualites()->attach(array_unique(Input::get('qualite')));
+			$structure->adresses()->attach(array_unique(Input::get('adresse')));
+			$structure->telephones()->attach(array_unique(Input::get('telephone')));
+			$structure->mails()->attach(array_unique(Input::get('mail')));
+		});		
+	}
+
+
+	public function edit($id){
+		$structure  = Structure::complet()->find($id);
+		$structure = $this->completeModel($structure); 
+		return $structure;
+	}
+
+
 	public function completeModel($model){
-		$model = $this->nomComplet($model);
 		$model = $this->nullVersIndefini($model);
 
 		return $model;
 	}
-
-	public function nomComplet($model){
-		$model->getNomCompletAttributes();
-		return $model;
-	}
-
-
 
 
 
@@ -61,27 +74,40 @@ class StructureG {
 
 
 
-	public function update($id, $input){
-// dd($input->all());
-		$structure = Structure::find($id); 
-// dd($input->get('adresse'));
+	public function update($id){
 
-//AfA prévoir transaction
-		$structure->adresses()->sync(array($input->get('adresse')));
-		$structure->coordonnees()->sync(array($input->get('coordonnees')));
-		$structure->qualites()->sync(array($input->get('qualite')));
-		$structure->nom = Input::get('nom');
-			// $structure->theme_id = Input::get('theme_id');
-			// $type = Input::get('livrable');
-			// $structure->livrable_type = $type;
-			// $structure->livrable_id = ($type == 'Lib\Editeurs\Editeur') ? Input::get('editeur_id') : Input::get('autoedite_id');
+		$structure = Structure::complet()->find($id); 
+
+		$structure->rais_soc = Input::get('rais_soc');
+
+		\DB::transaction(function() use($structure)
+		{
+			if (Input::get('adresse')) {
+				$structure->adresses()->sync(Input::get('adresse'));
+			}
+
+			if (Input::get('qualite')) {
+				$structure->qualites()->sync(Input::get('qualite'));
+			}
+
+			if (Input::get('telephone')) {
+				$structure->telephones()->sync(Input::get('telephone'));
+			}
+
+			if (Input::get('mail')) {
+				$structure->mails()->sync(Input::get('mail'));
+			}
+
+		});
+
 		$structure->save();
+		$structure->push();
 	}
 
 	/* Liste des structures */
-	public function listForSelect(){
+	public function listForSelect($sort = 'rais_soc'){
 		$structures = new Structure;
-		$structures = $this->getAllSortedBy('rais_soc', 'App\Models\Structure');
+		$structures = $this->getAllSortedBy($sort, 'App\Models\Structure');
 		$liste = array();
 		foreach ($structures as $structure) {
 			$liste[$structure->id] = $structure->rais_soc;

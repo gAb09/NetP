@@ -11,7 +11,7 @@ class Personne extends Model {
 	protected $dates = ['deleted_at'];
 	protected $fillable = array('Nom', 'Prenom');
 
-
+	protected $appends = array('nom_complet', 'prenom_complet');
 
 
 	public function adresses()
@@ -46,7 +46,7 @@ class Personne extends Model {
 
 	public function qualites()
 	{
-		return $this->morphToMany('App\\Models\\Qualite', 'qualifiable')->withPivot('id', 'rang');
+		return $this->morphToMany('App\\Models\\Qualite', 'qualifiable')->withPivot('id', 'rang', 'structure_id');
 	}
 
 	public function structures()
@@ -54,10 +54,15 @@ class Personne extends Model {
 		return $this->belongsToMany('App\\Models\\Structure')->withPivot('relation');
 	}
 
+	public function adhesions()
+	{
+		return $this->morphToMany('App\\Models\\Adhesion', 'adherable')->withPivot('id');
+	}
 
-    public function scopeComplet($query)
-    {
-        return $query->with(array(
+
+	public function scopeComplet($query)
+	{
+		return $query->with(array(
 			'adresses',
 			'adressables',
 			'telephones',
@@ -65,14 +70,18 @@ class Personne extends Model {
 			'mails',
 			'mailables',
 			'qualites',
-			'structures.qualites'
+			'structures'
 			));
-    }
+	}
 
-	public function getNomCompletAttributes()
+	public function getPrenomCompletAttribute()
 	{
-		$this->attributes['nom_complet'] = 
-		$this->prenom.' '.$this->nom;
+		return $this->attributes['prenom_complet'] = "$this->prenom $this->nom";
+	}
+
+	public function getNomCompletAttribute()
+	{
+		return $this->attributes['nom_complet'] = "$this->nom $this->prenom";
 	}
 
 

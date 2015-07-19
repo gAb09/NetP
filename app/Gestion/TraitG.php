@@ -12,7 +12,7 @@ trait TraitG{
 		{
 			if ($attribute != "deleted_at" and is_null($value))
 			{
-				$model[$attribute] = "Indéfini";
+				// $model[$attribute] = "Indéfini";
 				$model->{$attribute."_class"} = "indefini";
 			}
 
@@ -26,7 +26,7 @@ trait TraitG{
 	}
 
 	public function classeParRang($model, $collection_name){
-		$collection = $model->$collection_name;
+	$collection = $model->$collection_name;
 
 		foreach ($collection as $item)
 		{

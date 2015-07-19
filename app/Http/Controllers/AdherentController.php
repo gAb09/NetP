@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 use App\Gestion\PersonneG as Personne;
-use App\Gestion\AdherentG as Adherent;
+use App\Gestion\AdherentG;
 use App\Gestion\AdresseG;
 use App\Gestion\QualiteG;
 use App\Gestion\StructureG;
@@ -15,7 +15,7 @@ class AdherentController extends Controller {
    *
    * @return Response
    */
-  public function index(Adherent $adherents){
+  public function index(AdherentG $adherents){
     return view('Shared.mosaic')
     ->with('collection', $adherents->index())
     ->with('title', 'Les adhérents')

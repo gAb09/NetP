@@ -7,7 +7,7 @@
 
 
 @section('topcontent1')
-<h1 class="titrepage">Modification de la fiche de {!! $structure->nom_complet !!}</h1>
+<h1 class="titrepage">Modification de la fiche de “{!! $structure->rais_soc !!}”</h1>
 @stop
 
 
@@ -17,7 +17,7 @@
 @section('contenu')
 <hr />
 
-{!! Form::model($structure, ['method' => 'PUT', 'action' => ['StructureController@update', $structure->id])] !!}
+{!! Form::model($structure, ['method' => 'PUT', 'action' => ['StructureController@update', $structure->id], 'class' => 'edit']) !!}
 
 @include('Structures.form')
 @stop

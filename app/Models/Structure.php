@@ -26,7 +26,7 @@ class Structure extends Model {
 
 	public function telephones()
 	{
-		return $this->morphToMany('App\\Models\\Telephone', 'telephonable');
+		return $this->morphToMany('App\\Models\\Telephone', 'telephonable')->withPivot('rang', 'etiquette', 'note');
 	}
 
 	public function telephonables()
@@ -46,7 +46,12 @@ class Structure extends Model {
 
 	public function qualites()
 	{
-		return $this->morphToMany('App\\Models\\Qualite', 'qualifiable');
+		return $this->morphToMany('App\\Models\\Qualite', 'qualifiable')->withPivot('id', 'structure_id');
+	}
+
+	public function adhesions()
+	{
+		return $this->morphToMany('App\\Models\\Adhesion', 'adherable')->withPivot('id');
 	}
 
     public function scopeComplet($query)
@@ -61,12 +66,6 @@ class Structure extends Model {
 			'qualites'
 			));
     }
-
-	public function getNomCompletAttributes()
-	{
-		$this->attributes['nom_complet'] = 
-		$this->prenom.' '.$this->nom;
-	}
 
 
 }

@@ -17,8 +17,7 @@
 @section('contenu')
 <hr />
 
-{!! Form::model($structure, ['action' => 'StructureController@create']) !!}
-{!! var_dump($listQualites) !!}
+{!! Form::model($structure, ['action' => 'StructureController@store', 'class' => 'edit']) !!}
 @include('Structures.form')
 @stop
 

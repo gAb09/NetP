@@ -5,8 +5,6 @@ use App\Gestion\QualiteG;
 use App\Gestion\StructureG;
 use App\Gestion\TelephoneG;
 use App\Gestion\MailG;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Input;
 use App\Models\Personne;
 class PersonneController extends Controller {
@@ -18,7 +16,7 @@ class PersonneController extends Controller {
    */
   public function index(PersonneG $personnes){
     return view('Shared.mosaic')
-    ->with('collection', $personnes->index())
+    ->with('collection', $personnes->getAll())
     ->with('title', 'Les personnes')
     ->with('titre_page', 'Les personnes')
     ;
@@ -68,7 +66,6 @@ class PersonneController extends Controller {
     $listMails = $mails->listForSelect();
     $listStructures = $structures->listForSelect();
 
-    // return dd($personne);
     return view('Personnes.edit')
     ->with('title', 'Modification d\'une fiche')
     ->with('titre_page', 'Modification de la fiche de '.$personne->nom_complet)
@@ -88,12 +85,11 @@ class PersonneController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function update($id, PersonneG $personne, Request $request, Redirector $redirect)
+  public function update($id, PersonneG $personneG)
   {
-    $personne->update($id);
-// return var_dump('controleur');
+    $personneG->update($id);
 
-    return $redirect->action('PersonneController@index');
+    return \Redirect::action('PersonneController@index');
 }
 
   /**

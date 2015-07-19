@@ -2,19 +2,27 @@
 <fieldset class="fiche">
 	<legend>Identité</legend>
 	{!! Form::label('rais_soc', 'Nom', array ('class' => '')) !!}
-	{!! Form::text('rais_soc', null, array ('class' => '')) !!}
+	{!! Form::text('rais_soc', 'Saisir la raison sociale', array ('class' => '')) !!}
 
 	{!! Form::label('pseudo', 'Pseudo', array ('class' => '')) !!}
-	{!! Form::text('pseudo', null, array ('class' => '')) !!}
+	{!! Form::text('pseudo', 'Saisir un pseudo', array ('class' => '')) !!}
 </fieldset>
 
 
 <!-- Qualité-->
-<?php $valeur = (isset($structure->qualites->first()->id)) ? : 0 ?>
 <fieldset class="fiche">
 	<legend>Qualité</legend>
+	<?php $nbre = count($structure->qualites); ?>
+
+	@if($nbre == 0)
 	{!! Form::label('qualite', ' ', array ('class' => '')) !!}
-	{!! Form::select('qualite', $listQualites, $valeur,  array ('class' => '')) !!}
+	{!! Form::select('qualite[]', $listQualites, 0,  array ('class' => '')) !!}
+	@else
+	@foreach($structure->qualites as $qualite)
+	{!! Form::label('qualite', ' ', array ('class' => '')) !!}
+	{!! Form::select('qualite[]', $listQualites, $qualite->id,  array ('class' => '')) !!}
+	@endforeach
+	@endif
 </fieldset>
 
 
@@ -22,16 +30,21 @@
 <fieldset class="fiche">
 	<legend>Adresse</legend>
 
-	{!! Form::label('adresse', ' ', array ('class' => '')) !!}
-	{!! Form::select('adresse', $listAdresses, $valeur,  array ('class' => '')) !!}
-	@if(count($adresseCommuneWith))
-	<h4>Cette adresse est partagée avec :</h4>
-	<ul>
-		@foreach ($adresseCommuneWith as $partageur)
-		<li>{!! $partageur->prenom.' '.$partageur->nom !!}</li>
-		@endforeach
-	</ul>
-	@endif
+	@include('partials/forms/adresses', ['model' => $structure])
 
+</fieldset>
+
+<!-- Téléphones-->
+<fieldset class="fiche">
+	<legend>Téléphones</legend>
+
+	@include('partials/forms/telephones', ['model' => $structure])
+</fieldset>
+
+<!-- Mails-->
+<fieldset class="fiche">
+	<legend>Mails</legend>
+
+	@include('partials/forms/mails', ['model' => $structure])
 </fieldset>
 
