@@ -27,7 +27,7 @@
 								{!! HTML::linkRoute('structure.index', 'Liste', null, null) !!}
 							</li>
 							<li>
-								{!! HTML::linkRoute('structure.create', 'Créer', null, null) !!}
+								{!! HTML::linkRoute('structure.create', 'Ajouter', null, null) !!}
 							</li>
 						</ul>
 					</li>
@@ -36,11 +36,11 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Personnes<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-					<li>
-						{!! HTML::linkRoute('personne.index', 'Liste', null, null) !!}
-					</li>
 							<li>
-								{!! HTML::linkRoute('personne.create', 'Créer', null, null) !!}
+								{!! HTML::linkRoute('personne.index', 'Liste', null, null) !!}
+							</li>
+							<li>
+								{!! HTML::linkRoute('personne.create', 'Ajouter', null, null) !!}
 							</li>
 						</ul>
 					</li>
@@ -49,9 +49,10 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Adhésions<span class="caret"></span></a>
 						<ul class="dropdown-menu" role="menu">
-					<li>
-						{!! HTML::linkRoute('adhesion.index', 'Liste', null, null) !!}
-					</li>
+							<li>
+								{!! HTML::linkRoute('adhesion.index', 'Liste', null, null) !!}
+							</li>
+							<li role="separator" class="divider"></li>
 							<li>
 								{!! HTML::linkRoute('adhesion.create', 'Créer une adhésion Conso', ['type' => 'conso'], null) !!}
 							</li>
@@ -62,7 +63,7 @@
 								{!! HTML::linkRoute('adhesion.create', 'Créer une adhésion Pro pour une structure', ['type' => 'pro_structure'], null) !!}
 							</li>
 							<li>
-								{!! HTML::linkRoute('adhesion.create', 'Créer une adhésion Pro pour une personne', ['type' => 'pro_personne'], null) !!}
+								{!! HTML::linkRoute('adhesion.create', 'Créer une adhésion Pro en nom propre', ['type' => 'pro_personne'], null) !!}
 							</li>
 						</ul>
 					</li>

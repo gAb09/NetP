@@ -14,7 +14,7 @@ class StructureG {
 	public function getAll(){
 		$collection  = Structure::complet()->orderBy('rais_soc')->get();
 
-// var_dump($collection->toArray());
+// dd($collection->toArray());
 
 		$collection->each(function($model) use ($collection)
 		{

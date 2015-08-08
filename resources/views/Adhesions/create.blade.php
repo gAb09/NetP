@@ -85,11 +85,11 @@
 			{!! Form::label('is_forced1', 'Le statut de l’adhésion (VALIDE ou INVALIDE) sera déterminée AUTOMATIQUEMENT en fonction de certains paramètres de suivi.', ['class' => '']) !!}
 		</div>
 		<div class="radio radio_correctif">
-			{!! Form::radio('is_forced', -1, false, ['id' => 'is_forced2']) !!}
+			{!! Form::radio('is_forced', 1, false, ['id' => 'is_forced2']) !!}
 			{!! Form::label('is_forced2', 'Outrepasser les paramètres automatiques de suivi et FORCER l’adhésion comme VALIDE.', ['class' => '']) !!}
 		</div>
 		<div class="radio radio_correctif">
-			{!! Form::radio('is_forced', 1, false, ['id' => 'is_forced3']) !!}
+			{!! Form::radio('is_forced', -1, false, ['id' => 'is_forced3']) !!}
 			{!! Form::label('is_forced3', 'Outrepasser les paramètres automatiques de suivi et FORCER l’adhésion comme INVALIDE.', ['class' => '']) !!}
 		</div>
 	</div>

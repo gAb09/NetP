@@ -17,7 +17,7 @@
 	<!-- Bootstrap CSS -->
 	<link href="/css/app.css" rel="stylesheet">
 	<link href="/css/style.css" rel="stylesheet">
-	<link href="/css/adhesions.css" rel="stylesheet">
+	<link href="/css/np/np.css" rel="stylesheet">
 	<link href="/css/vendor/font-awesome.css" rel="stylesheet">
 
 	<!-- Web Fonts -->

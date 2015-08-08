@@ -59,41 +59,6 @@
 	font-weight: bold;
 }
 
-.adhpro {
-	background-color: #60ae59;
-	border-color: #60ae59;
-	/*order : 2;*/
-	/*color: #090;*/
-}
-
-.adhprovia {
-	background-color: #8ad883;
-	border-color: #8ad883;
-	/*order : 2;*/
-	/*color: #090;*/
-}
-
-.adhconso {
-	background-color: #61c1e4;
-	border-color: #61c1e4;
-	/*order : 1;*/
-	/*color: #090;*/
-}
-
-.adholdpro {
-	background-color: #dcffd7;
-	border-color: #dcffd7;
-	/*order : 3;*/
-	/*color: #009;*/
-}
-
-.adholdconso {
-	background-color: #ddf0f1;
-	border-color: #ddf0f1;
-	/*order : 3;*/
-	/*color: #009;*/
-}
-
 .indefini {
 	background-color: #EF3939;
 	border-color: #EF3939;
@@ -125,23 +90,6 @@ form.flow fieldset{
 	/*display:inline;*/
 }
 
-.radio_correctif input[type="radio"]{
-	margin-left: -11px;
-	margin-top: 3px;
-}
-
-.radio_correctif label{
-	margin-left: -11px;
-}
-
-.checkbox_correctif input[type="checkbox"]{
-	margin-left: 0px;
-	margin-top: 1px;
-}
-
-.checkbox_correctif label{
-	margin-left: 0px;
-}
 
 table tr:hover{
     box-shadow: 0px 0px 16px #aaa;

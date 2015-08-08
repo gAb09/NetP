@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 use App\Gestion\PersonneG;
 use App\Gestion\AdhesionG;
+use App\Models\Adhesion;
 use App\Gestion\StructureG;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
@@ -62,9 +63,13 @@ class AdhesionController extends Controller {
    * @param  int  $id
    * @return Response
    */
-  public function show($id)
+  public function show($adhesion, AdhesionG $adhesionG)
   {
-
+     $adhesion = $adhesionG->show($adhesion);
+    // return $adhesion;
+     return view('Adhesions.index_raw')
+    ->with('adhesion', $adhesion)
+    ;
   }
 
   /**
@@ -74,9 +79,9 @@ class AdhesionController extends Controller {
    * @return Response
    */
   public function edit($id, AdhesionG $adhesionG){
-    return view('Adhesions.edit_raw')
-    ->with('adhesion', $adhesionG->edit($id))
-    ;
+   return view('Adhesions.edit_raw')
+        ->with('adhesion', $adhesionG->edit($id))
+        ;
   }
 
   /**
@@ -87,12 +92,14 @@ class AdhesionController extends Controller {
    */
   public function update($id, AdhesionG $adhesion, Request $request, Redirector $redirect)
   {
-    return dd(Input::all());
-    return 'update de la fiche '.$id;
+    // var_dump(Input::all());
+    // return 'update de la fiche '.$id;
 
-    // $adhesion->update($id, $request);
-    // return $redirect->back();
-    // return $redirect->action('PersonneController@index');
+  $adhesion = Adhesion::find($id);
+  $adhesion->is_payed = Input::get('is_payed');
+  $adhesion->is_forced = Input::get('is_forced');
+  $adhesion->save();
+return \Response::make('', 204);
   }
 
   /**

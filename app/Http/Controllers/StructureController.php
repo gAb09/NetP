@@ -13,9 +13,9 @@ class StructureController extends Controller {
    *
    * @return Response
    */
-  public function index(StructureG $structures){
+  public function index(StructureG $structuresG){
     return view('Shared.mosaic')
-    ->with('collection', $structures->getAll())
+    ->with('collection', $structuresG->getAll())
     ->with('title', 'Les structures')
     ->with('titre_page', 'Structures')
     ;
@@ -57,7 +57,7 @@ class StructureController extends Controller {
   public function store(StructureG $structures)
   {
     $structures->store();
-    return \View::make('Structures.index');
+    return \Redirect::action('StructureController@index');
  }
 
   /**
@@ -98,8 +98,8 @@ class StructureController extends Controller {
     $listTelephones = $telephones->listForSelect();
     $listMails = $mails->listForSelect();
 
-    return var_dump(count($adresseCommuneWith));
-    return dd($adresseCommuneWith);
+    // return var_dump(count($adresseCommuneWith));
+    // return dd($adresseCommuneWith);
 
     return view('Structures.edit')
     ->with('title', 'Modification d\'une fiche')

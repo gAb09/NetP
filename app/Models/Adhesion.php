@@ -14,12 +14,12 @@ class Adhesion extends Model {
 
 	public function personne()
 	{
-		return $this->morphedByMany('App\\Models\\Personne', 'adherable')->withPivot('adherable_type');
+		return $this->morphedByMany('App\\Models\\Personne', 'adherable')->withPivot('adherable_type')->withTimestamps();
 	}
 
 	public function structure()
 	{
-		return $this->morphedByMany('App\\Models\\Structure', 'adherable')->withPivot('adherable_type');
+		return $this->morphedByMany('App\\Models\\Structure', 'adherable')->withPivot('adherable_type')->withTimestamps();
 	}
 
 
@@ -32,26 +32,28 @@ class Adhesion extends Model {
 
 	}
 
-	public function getValidationAttribute()
+	public function getValidationIsForcedAttribute()
 	{
-		if ($this->attributes['is_forced'] == 0){
-			if ($this->getValidite()) {
-				return 2;
-			}
-			return 3;
-		}else{
-			if ($this->attributes['is_forced'] == 1) {
-				return 1;
-			}
-			return 4;
+		if ($this->attributes['is_forced'] == "-1")
+		{
+			return "-1";
 		}
+
+		if ($this->attributes['is_forced'] == "1")
+		{
+			return "1";
+		}
+
+		return false;
 	}
 
-	public function getValidite()
+
+	public function getValiditeAttribute()
 	{
-			if ($this->attributes['is_payed']) {
-				return true;
-			}
+		if ($this->attributes['is_payed'])
+		{
+			return true;
+		}
 	}
 
 }

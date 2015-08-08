@@ -1,0 +1,210 @@
+/* Couleurs */
+/* Infobulles pour les dates */
+/* line 4, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\000034}}
+.info:hover,
+td.info:focus {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+/* line 9, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\000039}}
+.info span {
+  position: absolute;
+  /*    margin-top:18px;
+*/
+  margin-left: 6px;
+  color: #FFF;
+  background-color: #C9A945;
+  padding: 0px 4px;
+  border-radius: 3px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  transform: scale(0) rotate(-12deg);
+  transition: all .25s;
+  opacity: 0;
+}
+/* line 22, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000322}}
+.info span.left {
+  left: 0;
+  margin-top: 25px;
+}
+/* line 27, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000327}}
+.info:hover span,
+td.info:focus span {
+  transform: scale(1) rotate(0);
+  opacity: 1;
+}
+/* line 40, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000340}}
+.adhesions .btn_id_adh {
+  border-style: solid;
+  border-width: 6px;
+  height: 40px;
+  text-align: center;
+  width: 50px;
+}
+/* line 47, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000347}}
+.adhesions .validite_info:hover {
+  height: 40px;
+}
+/* line 51, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000351}}
+.adhesions .validite_info {
+  display: none;
+  height: 40px;
+}
+/* line 56, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000356}}
+.adhesions tr.pro_structure {
+  background-color: #9acd32;
+}
+/* line 60, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000360}}
+.adhesions tr.pro_personne {
+  background-color: colprop;
+}
+/* line 64, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000364}}
+.adhesions tr.conso {
+  background-color: #f0f8ff;
+}
+/* line 68, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000368}}
+.adhesions tr.couple {
+  background-color: #f0fdff;
+}
+/* line 72, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000372}}
+.adhesions,
+.adhesions th {
+  text-align: center;
+}
+/* line 76, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000376}}
+.adhesions a {
+  color: white;
+}
+/* line 80, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000380}}
+.adhesions .incorrect {
+  background-color: orange;
+}
+/* Valilidité */
+/* line 87, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000387}}
+.adhesions .adh_valid {
+  border-color: green;
+  background-color: green;
+  color: white;
+}
+/* line 93, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000393}}
+.adhesions .adh_invalid {
+  border-color: red;
+  background-color: red;
+  color: white;
+}
+/* line 99, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\0000399}}
+.adhesions .adh_forced {
+  background-color: white;
+  color: black;
+}
+/* line 104, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003104}}
+.adhesions td.note {
+  width: 1%;
+}
+/* line 108, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003108}}
+.adhesions td.info {
+  width: 4%;
+}
+/* line 116, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003116}}
+.adhesions tr.edit,
+th.edit {
+  box-shadow: 0px 0px 16px #aaa;
+  background-color: #ffff00;
+}
+/* line 121, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003121}}
+.surligne {
+  background-color: whitesmoke;
+  box-shadow: 0 0 16px #aaa;
+  height: 40px;
+  position: absolute;
+  right: 0;
+  width: 20px;
+}
+/* line 130, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003130}}
+.adhesions input[type="checkbox"] {
+  margin-bottom: -4px;
+  margin-top: -4px;
+}
+/* line 134, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003134}}
+.adhesions div.form-group {
+  margin-left: 20px;
+}
+/* line 138, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003138}}
+.adhesions i {
+  cursor: pointer;
+  color: #d2b48c;
+}
+/* line 143, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003143}}
+.adhesions i:hover {
+  color: #800000;
+}
+/* on cible les éléments possédant l'attribut infobulle : */
+/* line 155, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003155}}
+[infobulle] {
+  position: relative;
+  /*les span deviennent référents*/
+  /*cursor: help;*/
+}
+/* on génère un élément :after lors du survol :*/
+/* line 162, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003162}}
+[infobulle]:hover:after,
+[infobulle]:focus:after {
+  content: attr(infobulle);
+  /*on affiche infobulle*/
+  position: absolute;
+  top: 1.5em;
+  left: 0;
+  white-space: nowrap;
+  /*on interdit le retour à la ligne*/
+  padding: 4px;
+  background: maroon;
+  color: #fff;
+  border-radius: 10px;
+  z-index: 1;
+  /*pour s'afficher au dessus des éléments en position relative (ex: "Picon")*/
+  -webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  font-size: 0.8em;
+}
+/* line 182, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003182}}
+[infobulle]:focus {
+  outline: none;
+}
+/* on génère un second élément en :before*/
+/* line 187, adhesions.less */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/brunogabiot\/Sites\/www_lar5_NetP\/resources\/assets\/less\/np\/adhesions\.less}line{font-family:\00003187}}
+[infobulle]:hover:before,
+[infobulle]:focus:before {
+  content: "▲";
+  font-size: 15px;
+  left: 5px;
+  position: absolute;
+  top: 0.4em;
+  color: maroon;
+}

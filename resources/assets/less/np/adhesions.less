@@ -1,0 +1,194 @@
+@import "variables.less";
+
+/* Infobulles pour les dates */
+.info:hover,td.info:focus
+{
+    box-shadow:0 1px 0 rgba(255,255,255,.4);
+}
+
+.info span{
+    position:absolute;
+/*    margin-top:18px;
+*/    margin-left: 6px;
+    color:#FFF; background-color:#C9A945;
+    padding:0px 4px;
+    border-radius:3px;
+    box-shadow:0 0 2px rgba(0,0,0,.5);
+    transform:scale(0) rotate(-12deg);
+    transition:all .25s;
+    opacity:0;
+   }
+
+.info span.left{
+    left: 0;
+    margin-top:25px;
+   }
+
+.info:hover span, td.info:focus span{
+transform:scale(1) rotate(0);
+     opacity:1;
+ }
+
+
+
+
+
+
+
+
+
+.adhesions .btn_id_adh{
+	border-style: solid;
+	border-width: 6px;
+	height: 40px;
+    text-align: center;
+    width: 50px;}
+
+.adhesions .validite_info:hover{
+	height: 40px;
+}
+
+.adhesions .validite_info{
+	display: none;
+	height: 40px;
+}
+
+.adhesions tr.pro_structure{
+	background-color:@colpros;
+}
+
+.adhesions tr.pro_personne{
+	background-color:colprop;
+}
+
+.adhesions tr.conso{
+	background-color:@colconso;
+}
+
+.adhesions tr.couple{
+	background-color:@colcouple;
+}
+
+.adhesions, .adhesions th{
+	text-align: center;
+}
+
+.adhesions a{
+	color:white;
+}
+
+.adhesions .incorrect{
+	background-color:orange;
+}
+
+
+/* Valilidité */
+
+.adhesions .adh_valid{
+	border-color: green;
+	background-color:green;
+	color:white;
+}
+
+.adhesions .adh_invalid{
+	border-color: red;
+	background-color:red;
+	color:white;
+}
+
+.adhesions .adh_forced{
+	background-color:white;
+	color:black;
+}
+
+.adhesions td.note{
+	width: 1%;
+}
+
+.adhesions td.info{
+	width: 4%;
+}
+
+
+
+
+
+.adhesions tr.edit, th.edit{
+	box-shadow: 0px 0px 16px #aaa;
+	background-color:@col_edit;
+}
+
+.surligne{
+	background-color: whitesmoke;
+	box-shadow: 0 0 16px #aaa;
+	height: 40px;
+	position: absolute;
+	right: 0;
+	width: 20px;
+}
+
+.adhesions input[type="checkbox"]{
+    margin-bottom: -4px;
+    margin-top: -4px;}
+
+.adhesions div.form-group{
+	margin-left: 20px;
+}
+
+.adhesions i{
+	cursor:pointer;
+	color:@col_icone_action_off;
+}
+
+.adhesions i:hover{
+	color: @col_icone_action_on;
+}
+
+
+
+
+
+
+
+/* on cible les éléments possédant l'attribut infobulle : */
+
+[infobulle] {
+	position: relative;
+	/*les span deviennent référents*/
+	/*cursor: help;*/
+}
+/* on génère un élément :after lors du survol :*/
+
+[infobulle]:hover:after,
+[infobulle]:focus:after {
+	content: attr(infobulle);
+	/*on affiche infobulle*/
+	position: absolute;
+	top: 1.5em;
+	left: 0;
+	white-space: nowrap;
+	/*on interdit le retour à la ligne*/
+	padding: 4px;
+	background: maroon;
+	color: #fff;
+	border-radius: 10px;
+	z-index: 1;
+	/*pour s'afficher au dessus des éléments en position relative (ex: "Picon")*/
+	-webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);
+	box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);
+    font-size: 0.8em;
+}
+
+[infobulle]:focus {
+	outline: none;
+}
+/* on génère un second élément en :before*/
+
+[infobulle]:hover:before,
+[infobulle]:focus:before {
+	content: "▲";
+    font-size: 15px;
+    left: 5px;
+    position: absolute;
+    top: 0.4em;	color: maroon;
+}

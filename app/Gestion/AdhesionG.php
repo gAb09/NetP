@@ -22,7 +22,7 @@ class AdhesionG {
 	/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 	public function index(){
-		$collection  = Adhesion::with(['personne', 'structure'])
+		$collection  = Adhesion::with(['personne', 'structure'])->orderBy('type')
 		->get();
 
 		// dd($collection);
@@ -41,64 +41,31 @@ class AdhesionG {
 
 	private function handleModelIndex($model){
 		$model = $this->getAdherents($model);
-		$model = $this->setValidite($model);
-		$model = $this->setFlagClasses($model);
+		$model = $this->setValiditeClasses($model);
+		$model = $this->setPayedClasse($model);
 
 		return $model;
 	}
 
 
 
-	private function getAdherents($model){
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+/*                          SHOW 
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-		if (count($model->personne)) {
-			foreach ($model->personne as $key => $value) {
-				$adherents[] = $value->prenom_complet;
-			}
-		}
+public function show($id){
+	$adhesion  = Adhesion::with(['personne', 'structure'])
+	->find($id);
 
-		if (count($model->structure)) {
-			$adherents[] = $model->structure[0]->rais_soc;
-		}
-		
-		$model->adherents = $adherents;
+	$adhesion = $this->handleModelShow($adhesion); 
 
-		// return dd($model);
-		return $model;
-	}
+	return $adhesion;
+}
 
-
-	private function setValidite($model){
-		if ($model->validation == 1) {
-			$model->valid_class = 'valide_forced';
-			$model->valid_etiquette = 'Validation forcée';
-		}
-
-		if ($model->validation == 2) {
-			$model->valid_class = 'valide';
-			$model->valid_etiquette = 'Valide';
-		}
-
-		if ($model->validation == 3) {
-			$model->valid_class = 'invalide';
-			$model->valid_etiquette = 'Invalide';
-		}
-
-		if ($model->validation == 4) {
-			$model->valid_class = 'invalide_forced';
-			$model->valid_etiquette = 'Invalidation forcée';
-		}
-		// return dd($model);
-		return $model;
-	}
-
-
-	private function setFlagClasses($model){
-		if (!$model->is_payed) {
-			$model->is_payed_class = "invalide";
-		}
-		return $model;
-	}
+private function handleModelShow($model){
+	$model = $this->handleModelIndex($model); 
+	return $model;
+}
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -141,9 +108,8 @@ public function store(){
 	$adhesion->fill(Input::except('adherent', 'adherent2', '_token', '_method'));
 	$adhesion->is_payed = (Input::get('is_payed')) ? 1 : 0 ;
 
-	return dd($adhesion);
+	// return dd($adhesion);
 	$adhesion->save();
-
 	$type = Input::get('type');
 
 	switch ($type) {
@@ -168,6 +134,7 @@ public function store(){
 		dd('problème');
 		break;
 	}
+// dd($adhesion);
 
 }
 
@@ -189,12 +156,10 @@ public function edit($id){
 	return $adhesion;
 }
 
-private function handleModelEdit($adhesion){
-	$adhesion = $this->getAdherents($adhesion);
-		// $adhesion = $this->setValidite($adhesion);
-		// $adhesion = $this->setFlagClasses($adhesion);
+private function handleModelEdit($model){
+	$model = $this->handleModelIndex($model);
 
-	return $adhesion;
+	return $model;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -208,16 +173,6 @@ private function handleModelEdit($adhesion){
    * 
    * @return String
    */
-  public function getAdherableType($type){
-  	if (in_array($type, $this->type_personne_array)) {
-  		return 'App\Models\Personne';
-  	}
-
-  	if (in_array($type, $this->type_structure_array)) {
-  		return 'App\Models\Structure';
-  	}	
-  }
-
 
   public function getListForSelect($type, personneG $personneG, structureG $structureG){
   	if (in_array($type, $this->type_personne_array)) {
@@ -233,19 +188,66 @@ private function handleModelEdit($adhesion){
   	}	
   }
 
+  private function getAdherents($model){
+    $adherents = array();
+
+  	if (count($model->personne)) {
+  		foreach ($model->personne as $key => $value) {
+  			$adherents[] = $value->prenom_complet;
+  		}
+  	}
+
+  	if (count($model->structure)) {
+  		$adherents[] = $model->structure[0]->rais_soc;
+  	}
+
+  	$model->adherents = $adherents;
+
+		// return dd($model);
+  	return $model;
+  }
 
 
+  private function setValiditeClasses($model){
+  	if ($model->validation_is_forced)
+  	{
+  		$model->forced_class = "adh_forced";
 
-// 	public function find($id){
-// 		Personne::find($id);
-// 	}
+  		if ($model->validation_is_forced == "-1") {
+  			$model->valid_class = 'adh_invalid';
+  			$model->valid_etiquette = 'Forcée à : Invalide';
+  		}
+
+  		if ($model->validation_is_forced == "1") {
+  			$model->valid_class = 'adh_valid';
+  			$model->valid_etiquette = 'Forcée à : Valide';
+  		}
+
+  	}else{
+  		$model->forced_class = "";
+
+  		if ($model->validite){
+  			$model->valid_class = 'adh_valid';
+  			$model->valid_etiquette = 'Valide';
+  		}else{
+  			$model->valid_class = 'adh_invalid';
+  			$model->valid_etiquette = 'Invalide';
+  		}
+  	}
+		// return dd($model);
+  	return $model;
+  }
+
+  private function setPayedClasse($model){
+  	if (!$model->is_payed) {
+  		$model->is_payed_class = "incorrect";
+  	}else{
+  		$model->is_payed_class = "";
+  	}
+  	return $model;
+  }
 
 
-
-// 	public function update($id, $input){
-// // dd($input->all());
-// 		$personne = Personne::find($id); 
-// // dd($input->get('adresse'));
 
 // //AfA prévoir transaction
 // 		$personne->adresses()->sync(array($input->get('adresse')));

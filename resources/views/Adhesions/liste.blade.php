@@ -13,13 +13,19 @@
 
 
 @section('topcontent2')
+<button class="btn">
+Test</button>
 @stop
 
 
 
 @section('contenu')
+
 <table class="adhesions" style="width:100%">
 	<thead>
+		<th>
+			Notes
+		</th>
 		<th>
 			Id
 		</th>
@@ -27,35 +33,33 @@
 			Année
 		</th>
 		<th>
-			Type
-		</th>
-		<th>
 			Adhérent
 		</th>
 		<th>
+			Type
+		</th>
+		<th  id="tetiere">
 			Payée
 		</th>
-		<th>
-			Valide
-		</th>
-		<th>
-			Forcée
+		<th class="hidden">
+			Validité
 		</th>
 	</thead>
 	<tbody>
-	@foreach($collection as $adhesion)
-		<tr class="{!! $adhesion->type !!}" id="raw{!! $adhesion->id !!}">
-
-	@include('Adhesions.index_raw')
+		@foreach($collection as $adhesion)
+		<tr class="{!! $adhesion->type !!}" id="ligne_{!! $adhesion->id !!}" onDblClick="javascript:edit(this, {!! $adhesion->id !!});">
+			@include('Adhesions.index_raw')
 		</tr>
-	@endforeach
+		@endforeach
 	</tbody>
 
 </table>
+
 @stop
 
 
 @section('scripts')
 @parent
+
 <script src="/js/adhesions.js"></script>
 @stop
