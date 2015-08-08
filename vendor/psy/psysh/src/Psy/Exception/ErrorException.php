@@ -28,7 +28,7 @@ class ErrorException extends \ErrorException implements Exception
      * @param int       $lineno   (default: null)
      * @param Exception $previous (default: null)
      */
-    public function __construct($message = "", $code = 0, $severity = 1, $filename = null, $lineno = null, $previous = null)
+    public function __construct($message = '', $code = 0, $severity = 1, $filename = null, $lineno = null, $previous = null)
     {
         $this->rawMessage = $message;
 
@@ -74,15 +74,15 @@ class ErrorException extends \ErrorException implements Exception
      *
      *     set_error_handler(array('Psy\Exception\ErrorException', 'throwException'));
      *
+     * @throws ErrorException
+     *
      * @param int    $errno   Error type
      * @param string $errstr  Message
      * @param string $errfile Filename
      * @param int    $errline Line number
-     *
-     * @return void
      */
     public static function throwException($errno, $errstr, $errfile, $errline)
     {
-        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+        throw new self($errstr, 0, $errno, $errfile, $errline);
     }
 }
