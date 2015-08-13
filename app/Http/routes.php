@@ -28,6 +28,7 @@ Route::resource('adresse', 'AdresseController');
 Route::resource('adherent', 'AdherentController');
 Route::resource('personne', 'PersonneController');
 Route::resource('structure', 'StructureController');
+Route::resource('article', 'ArticleController');
 
 Route::get('adhesion/create/{type}', ['as' => 'adhesion.create', 'uses' => 'AdhesionController@create']);
 Route::resource('adhesion', 'AdhesionController', ['except' => array('create')]);
