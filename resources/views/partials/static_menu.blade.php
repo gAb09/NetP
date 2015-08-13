@@ -11,6 +11,7 @@
 				<a class="navbar-brand" href="/">Nature & Progrès Ariège</a>
 			</div>
 
+	<!-- Adhérents -->
 
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
@@ -32,6 +33,7 @@
 						</ul>
 					</li>
 
+	<!-- Personnes -->
 
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Personnes<span class="caret"></span></a>
@@ -45,6 +47,7 @@
 						</ul>
 					</li>
 
+	<!-- Adhésions -->
 
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Adhésions<span class="caret"></span></a>
@@ -68,6 +71,22 @@
 						</ul>
 					</li>
 					
+
+	<!-- Articles -->
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Articles<span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li>
+								{!! HTML::linkRoute('article.index', 'Liste', null, null) !!}
+							</li>
+							<li>
+								{!! HTML::linkRoute('article.create', 'Ajouter', null, null) !!}
+							</li>
+						</ul>
+					</li>
+
+
+
 				</ul>
 
 

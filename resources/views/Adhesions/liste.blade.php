@@ -48,7 +48,7 @@ Test</button>
 	<tbody>
 		@foreach($collection as $adhesion)
 		<tr class="{!! $adhesion->type !!}" id="ligne_{!! $adhesion->id !!}" onDblClick="javascript:edit(this, {!! $adhesion->id !!});">
-			@include('Adhesions.index_raw')
+			@include('Adhesions.raw_index')
 		</tr>
 		@endforeach
 	</tbody>

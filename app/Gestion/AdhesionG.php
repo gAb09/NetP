@@ -246,19 +246,3 @@ private function handleModelEdit($model){
   	}
   	return $model;
   }
-
-
-
-// //AfA prévoir transaction
-// 		$personne->adresses()->sync(array($input->get('adresse')));
-// 		$personne->coordonnees()->sync(array($input->get('coordonnees')));
-// 		$personne->qualites()->sync(array($input->get('qualite')));
-// 		$personne->structures()->sync(array($input->get('structure')));
-// 		$personne->nom = Input::get('nom');
-// 			// $personne->theme_id = Input::get('theme_id');
-// 			// $type = Input::get('livrable');
-// 			// $personne->livrable_type = $type;
-// 			// $personne->livrable_id = ($type == 'Lib\Editeurs\Editeur') ? Input::get('editeur_id') : Input::get('autoedite_id');
-// 		$personne->save();
-// 	}
-}
