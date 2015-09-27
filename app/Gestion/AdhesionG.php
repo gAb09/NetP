@@ -246,3 +246,4 @@ private function handleModelEdit($model){
   	}
   	return $model;
   }
+}

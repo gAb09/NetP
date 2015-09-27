@@ -7,7 +7,7 @@
 	</i>
 </span> 
 
-<!-- 
+
 <script>
     CKEDITOR.inline( 'cible');
     CKEDITOR.replace( 'cible', {
@@ -15,5 +15,5 @@
     	uiColor: '#9AB8F3'
     });
     </script>
- -->
+
 

@@ -1,4 +1,4 @@
-@include('Adhesions.raw')
+@include('Adhesions.liste_raw_shared')
 
 <td colspan="2">
 

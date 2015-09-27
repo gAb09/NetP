@@ -67,7 +67,7 @@ class AdhesionController extends Controller {
   {
      $adhesion = $adhesionG->show($adhesion);
     // return $adhesion;
-     return view('Adhesions.raw_index')
+     return view('Adhesions.liste_raw_index')
     ->with('adhesion', $adhesion)
     ;
   }
@@ -79,7 +79,7 @@ class AdhesionController extends Controller {
    * @return Response
    */
   public function edit($id, AdhesionG $adhesionG){
-   return view('Adhesions.raw_edit')
+   return view('Adhesions.liste_raw_edit')
         ->with('adhesion', $adhesionG->edit($id))
         ;
   }

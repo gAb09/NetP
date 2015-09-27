@@ -7,19 +7,18 @@
 
 
 @section('topcontent1')
-<h1 class="titrearticle">{{$titre_article}}</h1>
+<textarea name="editor1" id="editor1">&lt;p&gt;Initial editor content.&lt;/p&gt;</textarea>
 @stop
 
 
 
 @section('topcontent2')
-
+<textarea name="editor2" id="editor2">&lt;p&gt;Initial editor content.&lt;/p&gt;</textarea>
 @stop
 
 
 
 @section('contenu')
-
 <div class="offset3 span11 flexcontainer">
 	@foreach($collection as $article)
 
@@ -65,6 +64,6 @@ onDblClick="javascript:editArticle({!! $article->id !!});"
 <script src="/js/articles.js"></script>
 <script>
   // Turn off automatic editor creation first.
-    // CKEDITOR.disableAutoInline = true;
-    </script>
-    @stop
+  // CKEDITOR.disableAutoInline = true;
+CKEDITOR.replace( 'editor1', 'editor2' );  </script>
+  @stop
